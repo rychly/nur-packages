@@ -17,6 +17,7 @@ with pkgs; rec {
   getaddrinfo-tcp = callPackage ./pkgs/getaddrinfo-tcp { };
   googleearth = callPackage ./pkgs/googleearth { };
   h2status = callPackage ./pkgs/h2status { };
+  hunspell-dict-cs = callPackage ./pkgs/hunspell-dict-cs { };
   imgrepackerrk = callPackage_i686 ./pkgs/imgrepackerrk { };
   ipmiview = callPackage ./pkgs/ipmiview { };
   jad = callPackage_i686 ./pkgs/jad { };
