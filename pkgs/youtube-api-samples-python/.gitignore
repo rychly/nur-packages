@@ -1,0 +1,4 @@
+# https://cloud.google.com/console/project
+# create a project called "Youtube Upload Script", enable YouTube Data API v3, create credentials, download client_id.json as client_secrets.json
+client_id.json
+client_secrets.json

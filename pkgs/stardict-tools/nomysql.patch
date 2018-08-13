@@ -1,0 +1,110 @@
+diff -urN tools/src/wikipediaImage.cpp.orig tools/src/wikipediaImage.cpp
+--- tools/src/wikipediaImage.cpp.orig	2012-09-18 15:50:40.000000000 +0200
++++ tools/src/wikipediaImage.cpp	2012-09-18 15:51:27.000000000 +0200
+@@ -1,8 +1,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+-#include "mysql.h"
+-
+ #define CONN_HOST "localhost"
+ #define CONN_USER "wikiuser"
+ #define CONN_PASS "123"
+@@ -11,6 +9,7 @@
+ 
+ void dump_file()
+ {
++/*
+ 	MYSQL mysql;
+ 	if (!mysql_init(&mysql))
+ 		return;
+@@ -38,13 +37,16 @@
+ 	}
+ 	mysql_free_result(res);
+ 	mysql_close(&mysql);
++*/
+ }
+ 
+ int main(int argc,char * argv [])
+ {
++/*
+ 	if (mysql_library_init(argc, argv, NULL))
+ 		return 0;
+ 	dump_file();
+ 	mysql_library_end();
++*/
+ 	return 0;
+ }
+
+diff -urN tools/src/tabfile2sql.cpp.orig tools/src/tabfile2sql.cpp
+--- tools/src/tabfile2sql.cpp.orig	2012-09-18 15:54:11.000000000 +0200
++++ tools/src/tabfile2sql.cpp	2012-09-18 15:55:19.000000000 +0200
+@@ -5,8 +5,6 @@
+ #include <unistd.h>
+ #include <glib.h>
+ 
+-#include <mysql.h>
+-
+ #include <string>
+ 
+ void print_info(const char *info)
+@@ -80,8 +78,10 @@
+ 	char word_buf[word_len*2+3];
+ 	int meaning_len = strlen(meaning);
+ 	char meaning_buf[meaning_len*2+3];
++/*
+ 	mysql_escape_string(word_buf, word, word_len);
+ 	mysql_escape_string(meaning_buf, meaning, meaning_len);
++*/
+ 	fputs("INSERT INTO dict (keyword, definition) VALUES('", sqlfile);
+ 	fputs(word_buf, sqlfile);
+ 	fputs("','", sqlfile);
+
+diff -urN tools/src/Makefile.am.orig tools/src/Makefile.am
+--- tools/src/Makefile.am.orig	2007-11-07 08:55:24.000000000 +0100
++++ tools/src/Makefile.am	2012-09-18 16:33:10.000000000 +0200
+@@ -136,14 +136,14 @@
+ wikipedia_LDADD = $(STARDICT_LIBS) $(LFS_LIBS)
+ wikipedia_SOURCES = wikipedia.cpp
+ 
+-wikipediaImage_CPPFLAGS = -I/usr/include/mysql
+-wikipediaImage_LDFLAGS = -L/usr/lib/mysql
+-wikipediaImage_LDADD = $(STARDICT_LIBS) -lmysqlclient
++wikipediaImage_CPPFLAGS =
++wikipediaImage_LDFLAGS =
++wikipediaImage_LDADD = $(STARDICT_LIBS)
+ wikipediaImage_SOURCES = wikipediaImage.cpp
+ 
+-tabfile2sql_CPPFLAGS = -I/usr/include/mysql
+-tabfile2sql_LDFLAGS = -L/usr/lib/mysql
+-tabfile2sql_LDADD = $(STARDICT_LIBS) -lmysqlclient
++tabfile2sql_CPPFLAGS =
++tabfile2sql_LDFLAGS =
++tabfile2sql_LDADD = $(STARDICT_LIBS)
+ tabfile2sql_SOURCES = tabfile2sql.cpp
+ 
+ babylon_LDFLAGS =
+
+diff -urN tools/src/Makefile.in.orig tools/src/Makefile.in
+--- tools/src/Makefile.in.orig	2007-11-07 08:55:32.000000000 +0100
++++ tools/src/Makefile.in	2012-09-18 16:33:34.000000000 +0200
+@@ -687,13 +687,13 @@
+ wikipedia_LDFLAGS = $(LFS_LDFLAGS)
+ wikipedia_LDADD = $(STARDICT_LIBS) $(LFS_LIBS)
+ wikipedia_SOURCES = wikipedia.cpp
+-wikipediaImage_CPPFLAGS = -I/usr/include/mysql
+-wikipediaImage_LDFLAGS = -L/usr/lib/mysql
+-wikipediaImage_LDADD = $(STARDICT_LIBS) -lmysqlclient
++wikipediaImage_CPPFLAGS =
++wikipediaImage_LDFLAGS =
++wikipediaImage_LDADD = $(STARDICT_LIBS)
+ wikipediaImage_SOURCES = wikipediaImage.cpp
+-tabfile2sql_CPPFLAGS = -I/usr/include/mysql
+-tabfile2sql_LDFLAGS = -L/usr/lib/mysql
+-tabfile2sql_LDADD = $(STARDICT_LIBS) -lmysqlclient
++tabfile2sql_CPPFLAGS =
++tabfile2sql_LDFLAGS =
++tabfile2sql_LDADD = $(STARDICT_LIBS)
+ tabfile2sql_SOURCES = tabfile2sql.cpp
+ babylon_LDFLAGS = 
+ babylon_LDADD = $(STARDICT_LIBS)
