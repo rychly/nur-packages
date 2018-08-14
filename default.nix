@@ -52,6 +52,9 @@ with pkgs; rec {
   };
   setlayout = callPackage ./pkgs/setlayout { };
   soapui = callPackage ./pkgs/soapui { };
+  stardict-lingea-lexicon = callPackage ./pkgs/stardict-lingea-lexicon {
+    inherit stardict-tools;
+  };
   stardict-tools = callPackage ./pkgs/stardict-tools { };
   televize = callPackage ./pkgs/televize {
     inherit ctstream;
