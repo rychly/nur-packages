@@ -486,8 +486,11 @@ in {
     hardware.opengl.extraPackages = flatten (map (vendor:
       if (vendor == "intel") then [
         pkgs.vaapiIntel	# Intel VA-API
-        pkgs.libvdpau-va-gl	# the VDPAU driver with VA-API/OpenGL backend (e.g., for Adobe Flash Player and Mplayer)
+        pkgs.libvdpau-va-gl	# the VDPAU driver with VA-API/OpenGL backend (e.g., for Adobe Flash Player and Mplayer; since there is no VDPAU available on Intel chips)
         pkgs.intel-ocl	# Official Intel OpenCL runtime
+      ]
+      else if (vendor == "nvidia") then [
+        pkgs.vaapiVdpau	# HW video decode support in the VAAPI library for VDPAU platforms. e.g. NVIDIA
       ]
       else [ ]) cfg.hardware.chipsetVendors
     );
