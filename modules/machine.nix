@@ -474,8 +474,8 @@ in {
     services.udev.extraRules = mkIf (cfg.hardware.backlight) ''
       # Give video group backlight control permissions
       SUBSYSTEM=="backlight", \
-        RUN+="/run/current-system/sw/bin/chown :video /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power", \
-        RUN+="/run/current-system/sw/bin/chmod g+w /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power"
+        RUN+="${pkgs.coreutils}/bin/chown :video /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power", \
+        RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power"
     '';
 
     hardware.bluetooth = mkIf (cfg.hardware.bluetooth) {
