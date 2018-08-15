@@ -471,6 +471,12 @@ in {
     ## hardware
 
     programs.light.enable = mkIf (cfg.hardware.backlight) true;
+    services.udev.extraRules = mkIf (cfg.hardware.backlight) ''
+      # Give video group backlight control permissions
+      SUBSYSTEM=="backlight", \
+        RUN+="/run/current-system/sw/bin/chown :video /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power", \
+        RUN+="/run/current-system/sw/bin/chmod g+w /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power"
+    '';
 
     hardware.bluetooth = mkIf (cfg.hardware.bluetooth) {
       enable = true;
@@ -552,13 +558,13 @@ in {
     swapDevices = cfg.mount.swap;
 
     services.udisks2.enable = mkIf (cfg.mount.udisks != null) udisksEnabled;
-    services.udev.extraRules = mkIf (udisksSetShare) (mkAfter ''
+    services.udev.extraRules = mkIf (udisksSetShare) ''
       # UDISKS_FILESYSTEM_SHARED
       # ==0: mount filesystem to a private directory (/run/media/$USER/VolumeName) which is on tmpfs
       # ==1: mount filesystem to a shared directory (/media/VolumeName) which should be on tmpfs
       # See udisks(8), https://wiki.archlinux.org/index.php/Udisks#Mount_to_.2Fmedia_.28udisks2.29
       ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{UDISKS_FILESYSTEM_SHARED}="${if (cfg.mount.udisks == "user") then "0" else "1"}"
-    '');
+    '';
 
   } {
 
@@ -581,7 +587,9 @@ in {
     systemd.services.cups = mkIf (printingEnabled) {
       postStart = mkAfter (concatStringsSep "\n" (
         # remove all printers
-        [ "for I in $(lpstat -a | cut -d ' ' -f 1); do lpadmin -x \"$I\"; done" ]
+        [ ''
+          for I in $(lpstat -a | cut -d ' ' -f 1); do lpadmin -x "$I"; done
+        '' ]
         ++
         # install defined printers
         map (printer:
@@ -593,7 +601,10 @@ in {
         ) cfg.printing.printers
         ++
         # set a default printer if any
-        optional (cfg.printing.defaultPrinter != null) "lpadmin -d \"${cfg.printing.defaultPrinter}\""
+        optional (cfg.printing.defaultPrinter != null) ''
+          lpadmin -d "${cfg.printing.defaultPrinter}"
+          echo "Default ${cfg.printing.defaultPrinter}" >/etc/cups/lpoptions
+        ''
       ));
     };
 
