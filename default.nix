@@ -43,6 +43,7 @@ with pkgs; rec {
   };
   raccoon4 = callPackage ./pkgs/raccoon/4.nix { };
   rajce-download = callPackage ./pkgs/rajce-download {};
+  rclonefs = callPackage ./pkgs/rclonefs { };
   rkflashkit = callPackage ./pkgs/rkflashkit { };
   rkupgradetool = callPackage_i686 ./pkgs/rkupgradetool { };
   rockchip-mkbootimg = callPackage ./pkgs/rockchip-mkbootimg { };
