@@ -4,11 +4,11 @@ with lib;
 
 let
 
-  cfg = config.custom.spellDicts;
+  cfg = config.rychly.spellDicts;
 
 in {
 
-  options.custom.spellDicts = {
+  options.rychly.spellDicts = {
 
     aspell = mkOption {
       type = types.nullOr types.unspecified;	# FIXME: the unspecified is lambda (ps: types.listOf types.package)

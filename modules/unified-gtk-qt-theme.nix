@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.custom.unifiedGtkQtTheme;
+  cfg = config.rychly.unifiedGtkQtTheme;
 
   ## modules
 
@@ -51,7 +51,7 @@ let
 
 in {
 
-  options.custom.unifiedGtkQtTheme = mainModuleOptions;
+  options.rychly.unifiedGtkQtTheme = mainModuleOptions;
 
   # see also https://wiki.archlinux.org/index.php/GTK%2B and https://wiki.archlinux.org/index.php/Qt
 

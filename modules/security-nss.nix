@@ -4,11 +4,11 @@ with lib;
 
 let
 
-  cfg = config.custom.security.nss;
+  cfg = config.rychly.security.nss;
 
 in {
 
-  options.custom.security.nss = {
+  options.rychly.security.nss = {
 
     fromPki = mkOption {
       type = types.bool;
@@ -65,7 +65,7 @@ in {
       '';
     };
 
-    custom.machine.homeFiles = mkIf (cfg.useSystemDb) {
+    rychly.machine.homeFiles = mkIf (cfg.useSystemDb) {
       ".pki/nssdb/pkcs11.txt" = user: {	# text '' below is prefixed by single ' so it is '''
         text = ''
           library=libnsssysinit.so

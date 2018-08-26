@@ -4,25 +4,23 @@ with lib;
 
 let
 
-  cfg = config.custom.multiGlibcLocalePaths;
+  cfg = config.rychly.multiGlibcLocalePaths;
+
+  lib-custom = import ../lib { inherit pkgs; };
 
   # A random Nixpkgs revision *before* the default glibc
   # was switched to version 2.27.x (version <= 18.03).
   oldpkgs = pkgs;
 
   # A random Nixpkgs revision *after* the default glibc
-  # was switched to version 2.27.x (version > 18.03).
-  # sudo nix-channel --add "http://nixos.org/channels/nixpkgs-unstable" nixpkgs-unstable
-  # sudo nix-channel --update nixpkgs-unstable
-  newpkgs = import <nixpkgs-unstable> { };
-
-  theLatestOldVersion = "18.03";
+  # was switched to version 2.27.x (version >= 18.09).
+  newpkgs = lib-custom.pkgs-in-version pkgs "18.09";
 
 in {
 
-  options.custom.multiGlibcLocalePaths = mkOption {
+  options.rychly.multiGlibcLocalePaths = mkOption {
     type = types.bool;
-    default = (builtins.compareVersions config.system.stateVersion theLatestOldVersion) != 1;	# value 1 (newer than) -> values are -1 (older than) or 0 (equal to)
+    default = (lib-custom.pkgs-version oldpkgs) != (lib-custom.pkgs-version newpkgs);	# if newpkgs is different from (i.e., newer than) oldpkgs
     description = "Provide version-specific <code>LOCALE_ARCHIVE</code> environment variables to mitigate the effects of <a href=\"https://github.com/NixOS/nixpkgs/issues/38991\">issue 38991</a>.";
   };
 

@@ -4,9 +4,9 @@ with lib;
 
 let
 
-  cfg = config.custom.machine;
+  cfg = config.rychly.machine;
 
-  pkgs-custom = config.custom.pkgs;
+  pkgs-custom = import ../pkgs { inherit pkgs; };
 
   ## modules
 
@@ -431,7 +431,7 @@ let
 
 in {
 
-  options.custom.machine = mainModuleOptions;
+  options.rychly.machine = mainModuleOptions;
 
   config = mkMerge [ {	# merge list items as if they were declared in separate modules
 
@@ -504,8 +504,9 @@ in {
       enable = true;
     };
 
-    nix.maxJobs = lib.mkDefault cfg.hardware.cpuCores;
+    nix.maxJobs = cfg.hardware.cpuCores;
     nix.buildCores = 0;
+    zramSwap.numDevices = cfg.hardware.cpuCores;
 
     powerManagement.cpuFreqGovernor = mkIf (cfg.hardware.powersaving) (lib.mkDefault "powersave");
     services.tlp.enable = mkIf (cfg.hardware.powersaving) true;	# For optimal power management (better than pmutils)

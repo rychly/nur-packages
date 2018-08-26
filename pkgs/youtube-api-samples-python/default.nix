@@ -40,6 +40,7 @@ python2Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Code samples for YouTube APIs in Python, including the YouTube Data API, YouTube Analytics API, and YouTube Live Streaming API";
     homepage = https://github.com/youtube/api-samples/tree/master/python;
     license = licenses.asl20;
