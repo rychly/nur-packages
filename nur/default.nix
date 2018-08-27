@@ -25,10 +25,6 @@ in {
 
   imports = builtins.attrValues nurLocal.repos.rychly.modules;
 
-  # add the following to function calls in all imported configurations (though the value will only be used in modules that directly refer to it)
-
-  config._module.args.nur = nurWithLocalOverride;
-
   # add the following as attribute sub-set of the configuration attrbite set
 
   options.nur = with lib; mkOption {
@@ -38,5 +34,10 @@ in {
   };
 
   config.nur = nurWithLocalOverride;
+
+  # add the following to function calls in all imported configurations (though the value will only be used in modules that directly refer to it)
+  # FIXME: setting config._module here and its usage otherwhere may result into "inifinite recursion" (it is better to use `config.nur` as defined above)
+
+  config._module.args.nur = nurWithLocalOverride;
 
 }

@@ -77,7 +77,7 @@
   rofiWithGlueProBlueTheme = self: super: {
     # rofi theme is possible to set only in the unstable, that is after r18.03, see https://github.com/NixOS/nixpkgs/commits/master/pkgs/applications/misc/rofi/wrapper.nix
     rofi = let
-      super-rofi = lib-custom.pkgs-in-version super "18.09";
+      super-rofi = (lib-custom.pkgs-in-version super "18.09").rofi;
     in super-rofi.override {
       theme = "${super-rofi}/share/rofi/themes/glue_pro_blue";
     };

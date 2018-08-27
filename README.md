@@ -9,7 +9,13 @@ My own user-contributed packages as proposed in [nix-community/NUR](https://gith
 
 ## Setup
 
-Import the `./nur-packages/nur` into the module arguments (it will be available as `nur` module function argument; also, all modules from `rychly` NUR repository will be imported) by:
+By importing `./nur-packages/nur`, the NUR will be available as:
+
+* `config.nur` option (it is safe to use, no errors)
+* `nur` module function argument (its usage may result into "infinite recursion" errors)
+
+The `rychly` NUR repository is available locally and all other NUR repositories are fetched from the GIT NUR master branch.
+Also, all modules from the `rychly` NUR repository will be imported automatically.
 
 ``` nix
 { ... }:
@@ -27,19 +33,18 @@ You can also add and use NUR as [described in the docs](https://github.com/nix-c
 
 ## Usage
 
-After the importing NUR as described above, the NUR repositories are available in modules via `nur` module function argument.
-The `rychly` NUR repository is available locally and all other NUR repositories are fetched from the GIT NUR master branch.
+After the importing NUR as described above, the NUR is available in modules via `config.nur` option.
 
 ### Packages
 
 The packages available in this NUR repository can be installed like this:
 
 ``` nix
-{ nur, ... }:
+{ config, ... }:
 
 let
 
-  pkgs-custom = nur.repos.rychly;
+  pkgs-custom = config.nur.repos.rychly;
 
 in {
 
@@ -55,11 +60,11 @@ in {
 There are several overlays available that can be imported with an expression like this:
 
 ``` nix
-{ nur, ... }:
+{ config, ... }:
 
 let
 
-  overlays-custom = nur.repos.rychly.overlays;
+  overlays-custom = config.nur.repos.rychly.overlays;
 
 in {
 
@@ -72,4 +77,4 @@ in {
 
 ### Modules
 
-After the importing NUR as described above, all modules from `rychly` NUR repository will be automatically imported.
+After the importing NUR as described above, all modules from `rychly` NUR repository will be imported automatically.
