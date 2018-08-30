@@ -16,8 +16,10 @@ let
     };
   };
 
-  # the distribution NUR with the local override
-  nurWithLocalOverride = lib.recursiveUpdateUntil (path: l: r: path == [ "repos" ]) nurLatest nurLocal;
+  # use the distribution NUR with the local override
+  nurWithLocalOverride = nurLatest // {
+    repos = nurLatest.repos // nurLocal.repos;
+  };
 
 in {
 
@@ -30,14 +32,20 @@ in {
   options.nur = with lib; mkOption {
     type = types.unspecified;	# its is read-only, so the type-check is not needed
     readOnly = true;
-    description = "Read-only attribute set of the Nix User Repository (NUR) in its latest version with the local override.";
+    description = "Read-only attribute set of the global Nix User Repository (NUR) in its latest version with the local override.";
+  };
+
+  options.nurLocal = with lib; mkOption {
+    type = types.unspecified;	# its is read-only, so the type-check is not needed
+    readOnly = true;
+    description = "Read-only attribute set of the local Nix User Repository (NUR).";
   };
 
   config.nur = nurWithLocalOverride;
+  config.nurLocal = nurLocal;
 
-  # add the following to function calls in all imported configurations (though the value will only be used in modules that directly refer to it)
-  # FIXME: setting config._module here and its usage otherwhere may result into "inifinite recursion" (it is better to use `config.nur` as defined above)
-
-  config._module.args.nur = nurWithLocalOverride;
+  # Do not use `config._module.args.nur` to add the NUR to function calls in all imported configurations (though the value will only be used in modules that directly refer to it).
+  # * setting config._module here and its usage otherwhere may result into "inifinite recursion" (it is better to use `config.nur` as defined above)
+  # * _module.args are evaulated first even before they are utilised (and that is also reason for the "inifinite recursion")
 
 }

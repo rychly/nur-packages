@@ -191,6 +191,12 @@ let
           description = "Number of CPU cores for parallel building.";
         };
 
+        lidSwitch = mkOption {
+          default = "suspend";
+          type = types.enum [ "ignore" "poweroff" "reboot" "halt" "kexec" "suspend" "hibernate" "hybrid-sleep" "lock" ];
+          description = "Specifies what to be done when the laptop lid is closed.";
+        };
+
         powersaving = mkOption {
           type = types.bool;
           default = true;
@@ -507,6 +513,8 @@ in {
     nix.maxJobs = cfg.hardware.cpuCores;
     nix.buildCores = 0;
     zramSwap.numDevices = cfg.hardware.cpuCores;
+
+    services.logind.lidSwitch = cfg.hardware.lidSwitch;
 
     powerManagement.cpuFreqGovernor = mkIf (cfg.hardware.powersaving) (lib.mkDefault "powersave");
     services.tlp.enable = mkIf (cfg.hardware.powersaving) true;	# For optimal power management (better than pmutils)
