@@ -1,7 +1,7 @@
 # nur-packages
 
 [![Pipeline status](https://gitlab.com/rychly/nur-packages/badges/master/pipeline.svg)](https://gitlab.com/rychly/nur-packages/commits/master)
-[![Build Status](https://travis-ci.com/rychly/nur-packages.svg?branch=master)](https://travis-ci.com/rychly/nur-packages)
+[![Build Status](https://travis-ci.org/rychly/nur-packages.svg?branch=master)](https://travis-ci.org/rychly/nur-packages)
 [![Coverage Report](https://gitlab.com/rychly/nur-packages/badges/master/coverage.svg)](https://gitlab.com/rychly/nur-packages/commits/master)
 [![Cachix Cache](https://img.shields.io/badge/cachix-rychly-nur-packages-blue.svg)](https://rychly-nur-packages.cachix.org)
 

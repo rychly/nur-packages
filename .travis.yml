@@ -14,7 +14,7 @@ install:
  - if [ -n "${CACHIX_CACHE}" ]; then cachix use "${CACHIX_CACHE}"; fi
 
 script:
- - outs=$(nix-build non-broken.nix) && echo Produced $outs
+ - outs=$(NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1 nix-build non-broken.nix) && echo Produced $outs
  - nix eval -f default.nix 'lib'
  - nix eval -f default.nix 'modules'
  - nix eval -f default.nix 'overlays'

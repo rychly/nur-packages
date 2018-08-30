@@ -8,8 +8,8 @@ instantiation:
   script:
     # evaluation only, no artifacts -> no redistribution
     - export NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1
-    - nix-instantiate gitlab-ci
-    - nix-env -qa --json --file gitlab-ci
+    - nix-instantiate -E 'with import <nixpkgs> { config.checkMeta = true; }; callPackage ./. { }'
+    - nix-env -qa --json 'with import <nixpkgs> { config.checkMeta = true; }; callPackage ./. { }'
   artifacts:
     paths:
       - /nix/store/*.drv
