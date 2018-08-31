@@ -3,6 +3,8 @@
 with pkgs; rec {
 
   ## packages
+  # Only packages should be here, e.g., not lists, sets, etc. of packages as those cannot be detected by `../non-broken-and-unfree.nix` (i.e., do not use `pkgs.recurseIntoAttrs`).
+
   adbfs-rootless = callPackage ./adbfs-rootless {
     adb = androidenv.platformTools;
   };
@@ -17,9 +19,7 @@ with pkgs; rec {
   getaddrinfo-tcp = callPackage ./getaddrinfo-tcp { };
   googleearth = callPackage ./googleearth { };
   h2status = callPackage ./h2status { };
-  hunspellDicts = recurseIntoAttrs {
-    cs = callPackage ./hunspell-dicts/ooa-cs.nix { };
-  };
+  hunspellDictCs = callPackage ./hunspell-dicts/ooa-cs.nix { };
   imgrepackerrk = callPackage_i686 ./imgrepackerrk { };
   ipmiview = callPackage ./ipmiview { };
   jad = callPackage_i686 ./jad { };
@@ -30,11 +30,9 @@ with pkgs; rec {
     inherit xulrunner192;
     plugins = [];
   };
-  modelio-plugins = recurseIntoAttrs {
-    ba = callPackage ./modelio-plugins/ba.nix { };
-    sa = callPackage ./modelio-plugins/sa.nix { };
-    sd = callPackage ./modelio-plugins/sd.nix { };
-  };
+  modelio-plugin-ba = callPackage ./modelio-plugins/ba.nix { };
+  modelio-plugin-sa = callPackage ./modelio-plugins/sa.nix { };
+  modelio-plugin-sd = callPackage ./modelio-plugins/sd.nix { };
   pan-baidu-download = callPackage ./pan-baidu-download { };
   pass-git-helper = callPackage ./pass-git-helper { };
   pass-menu = callPackage ./pass-menu { };

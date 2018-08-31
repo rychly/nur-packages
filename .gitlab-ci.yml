@@ -1,15 +1,34 @@
-# adopted from https://gitlab.com/Ma27/nur-packages/raw/master/.gitlab-ci.yml
-
 image: nixos/nix
-stages: [build]
 
-instantiation:
+variables:
+  CACHIX_CACHE: ""
+  NUR_REPO: "rychly"
+  PUBLIC: "public"
+
+.install: &install
+  before_script:
+    - nix --version
+    - nix-channel --update
+    - nix-env -i git
+    - if [ -n "${CACHIX_CACHE}" ]; then nix-env -i cachix; fi
+    - if [ -n "${CACHIX_CACHE}" ]; then cachix use "${CACHIX_CACHE}"; fi
+
+stages:
+  - build
+
+pages:
   stage: build
+  <<: *install
   script:
-    # evaluation only, no artifacts -> no redistribution
-    - export NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1
-    - nix-instantiate -E 'with import <nixpkgs> { config.checkMeta = true; }; callPackage ./. { }'
-    - nix-env -qa --json 'with import <nixpkgs> { config.checkMeta = true; }; callPackage ./. { }'
+    - NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1 nix-instantiate -E 'with import <nixpkgs> { config.checkMeta = true; }; callPackage ./. { }' && echo "Instantiated/evaluated all expressions (including broken and unfree packages)"
+    - outs=$(NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1 nix-build non-broken-and-unfree.nix) && echo "Built non-broken and free packages into $outs"
+    - nix eval -f default.nix 'lib' && echo "Evaluated lib"
+    - nix eval -f default.nix 'modules' && echo "Evaluated modules"
+    - nix eval -f default.nix 'overlays' && echo "Evaluated overlays"
+    - if [ -n "${CACHIX_CACHE}" ]; then cachix push "${CACHIX_CACHE}" $outs; fi
+    - if [ "false" = "${TRAVIS_PULL_REQUEST}" -a "master" = "${TRAVIS_BRANCH}" ]; then curl -XPOST "https://nur-update.herokuapp.com/update?repo=${NUR_REPO}"; fi
+    - mkdir -p "${PUBLIC}"
+    - sh -c "for I in result result-*; do SRC=\$(readlink \$I); TRG=\$(basename \$SRC).tgz; tar czf ${PUBLIC}/\$TRG \$SRC && echo \"<a href=\\\"\$TRG\\\">\$SRC</a>\" >> ${PUBLIC}/index.html; done"
   artifacts:
     paths:
-      - /nix/store/*.drv
+      - ${PUBLIC}

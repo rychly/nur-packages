@@ -11,7 +11,7 @@ stdenv_32bit.mkDerivation rec {
 
   src = fetchurl {
     name = "${name}.zip";
-    url = "https://forum.xda-developers.com/attachment.php?s=24396926521f5452838e662bb9db3161&attachmentid=4136650&d=1493819013";
+    url = "https://forum.xda-developers.com/attachment.php?attachmentid=4136650&d=1493819013";
     sha256 = "7d90934e0c976c2ad2d154944f987b85b5c8f689593cfb701db017cbe2e3619f";
   };
 

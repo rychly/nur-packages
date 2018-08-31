@@ -18,4 +18,3 @@ in filterSet
      (n: !(n=="lib"||n=="overlays"||n=="modules")) # filter out non-packages
      (p: true) # all packages are ok
      (import ./default.nix { pkgs = super; })
-

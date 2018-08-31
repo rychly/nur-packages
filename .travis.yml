@@ -10,16 +10,17 @@ env:
 install:
  - nix --version
  - travis_retry nix-channel --update
+ - nix-env -i git
  - if [ -n "${CACHIX_CACHE}" ]; then nix-env -i cachix; fi
  - if [ -n "${CACHIX_CACHE}" ]; then cachix use "${CACHIX_CACHE}"; fi
 
 script:
- - outs=$(NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1 nix-build non-broken.nix) && echo Produced $outs
- - nix eval -f default.nix 'lib'
- - nix eval -f default.nix 'modules'
- - nix eval -f default.nix 'overlays'
+ - NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1 nix-instantiate -E 'with import <nixpkgs> { config.checkMeta = true; }; callPackage ./. { }' && echo "Instantiated/evaluated all expressions (including broken and unfree packages)"
+ - outs=$(NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_BROKEN=1 nix-build non-broken-and-unfree.nix) && echo "Built non-broken and free packages into $outs"
+ - nix eval -f default.nix 'lib' && echo "Evaluated lib"
+ - nix eval -f default.nix 'modules' && echo "Evaluated modules"
+ - nix eval -f default.nix 'overlays' && echo "Evaluated overlays"
 
 after_success:
   - if [ -n "${CACHIX_CACHE}" ]; then cachix push "${CACHIX_CACHE}" $outs; fi
-  - if [ "false" = "${TRAVIS_PULL_REQUEST}" -a "master" = "${TRAVIS_BRANCH}" ]; then
-      curl -XPOST "https://nur-update.herokuapp.com/update?repo=${NUR_REPO}"; fi
+  - if [ "false" = "${TRAVIS_PULL_REQUEST}" -a "master" = "${TRAVIS_BRANCH}" ]; then curl -XPOST "https://nur-update.herokuapp.com/update?repo=${NUR_REPO}"; fi

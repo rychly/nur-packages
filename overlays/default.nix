@@ -45,9 +45,9 @@
     # Modelio plugins
     modelio = pkgs-custom.modelio.override {
       plugins = [
-        pkgs-custom.modelio-plugins.ba
-        pkgs-custom.modelio-plugins.sa
-        pkgs-custom.modelio-plugins.sd
+        pkgs-custom.modelio-plugin-ba
+        pkgs-custom.modelio-plugin-sa
+        pkgs-custom.modelio-plugin-sd
       ];
     };
   };

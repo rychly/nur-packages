@@ -14,8 +14,9 @@ let
     after = [ "sysinit.target" "local-fs.target" ];
     serviceConfig.Type = "oneshot";
     serviceConfig.ExecStart = writeScript "disable-c6-state" ''
+      #!${stdenv.shell}
       grep -q "^msr " /proc/modules || ${kmod}/bin/modprobe msr
-      ${zenstates}/bin/zenstates --c6-disable --list
+      exec ${zenstates}/bin/zenstates --c6-disable --list
     '';
   };
 
