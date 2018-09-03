@@ -22,6 +22,16 @@
     };
   };
 
+  chmlibWithExamples = self: super: {
+    # Build example programs that use chmlib
+    chmlibWithExamples = super.chmlib.overrideAttrs(oldAttrs: rec {
+      configureFlags = [
+        # from Gentoo, see https://github.com/gentoo/gentoo/blob/master/dev-libs/chmlib/chmlib-0.40-r1.ebuild#L24
+        "--enable-examples"
+      ];
+    });
+  };
+
   jetbrainsWithSystemJdk = self: super: let
     systemJdk = { jdk = super.jdk; };
   in {
