@@ -4,6 +4,7 @@ let
 
   module-list = [
     ./machine.nix
+    ./mc.nix
     ./multi-glibc-locale-paths.nix
     ./security-nss.nix
     ./spell-dicts.nix

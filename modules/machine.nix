@@ -105,281 +105,281 @@ let
 
   mainModuleOptions = {
 
-      name = mkOption {
+    name = mkOption {
+      type = types.str;
+      description = "The full name of the machine (e.g., hostname.domain).";
+    };
+
+    sysAdminEmail = mkOption {
+      type = types.nullOr (types.strMatching "([^,@]+@[^,@]+)");
+      default = null;
+      description = "Email address of a system administrator to forward root's emails.";
+    };
+
+    setHostNameAndDomain = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Set <code>networking.hostName</code> and <code>networking.domain</code> according to <code>name<code> attribute."
+        + " The host name and domain should not be set in some cases, e.g., if you want to obtain it from a DHCP server (if using DHCP).";
+    };
+
+    numLockOn = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      description = "Turns on (true) or off (false) the numlock key in X sessions. Null value does not affect the numlock key state.";
+    };
+
+    systemPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = "The set of packages (for this machine) that appear in <code>/run/current-system/sw</code>."
+        + " These packages are automatically available to all users, and are automatically updated every time you rebuild the system configuration.";
+    };
+
+    etcFilesMatch = {
+
+      separator = mkOption {
         type = types.str;
-        description = "The full name of the machine (e.g., hostname.domain).";
+        default = "=";
+        description = "Separator for matching the suffix in filenames of etc files.";
       };
 
-      sysAdminEmail = mkOption {
-        type = types.nullOr (types.strMatching "([^,@]+@[^,@]+)");
-        default = null;
-        description = "Email address of a system administrator to forward root's emails.";
+      suffix = mkOption {
+        type = types.nullOr types.str;
+        default = hostNameFromName cfg.name;
+        description = "Required suffix, e.g., the name of the machine, for etc files if there is the separator in their filenames.";
       };
 
-      setHostNameAndDomain = mkOption {
+    };
+
+    etcFilesDirs = mkOption {
+      type = types.listOf (types.either types.path types.str);
+      default = [ ];
+      description = "List of directories (by paths or strings; paths are stored in a public nix-store, strings are not stored and can be in a secure path)."
+        + " The content of the directories will be symlinked to the etc directory by <code>environment.etc</code>.";
+    };
+
+    udev = mkOption {
+      type = types.attrs;
+      default = { };
+      description = "Configuration of NixOS <code>services.udev</code> option, e.g., to set extra rules of HW database.";
+    };
+
+    hardware = {
+
+      backlight = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable backlight control.";
+      };
+
+      bluetooth = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable support for Bluetooth.";
+      };
+
+      chipsetVendors = mkOption {
+        type = types.listOf (types.enum [ "intel" "amd" "nvidia" ]);
+        default = [ ];
+        description = "List of supported chipset vendors: Intel, AMD, NVidia, etc.";
+      };
+
+      cpuCores = mkOption {
+        type = types.ints.positive;
+        default = 1;
+        description = "Number of CPU cores for parallel building.";
+      };
+
+      lidSwitch = mkOption {
+        default = "suspend";
+        type = types.enum [ "ignore" "poweroff" "reboot" "halt" "kexec" "suspend" "hibernate" "hybrid-sleep" "lock" ];
+        description = "Specifies what to be done when the laptop lid is closed.";
+      };
+
+      powersaving = mkOption {
         type = types.bool;
         default = true;
-        description = "Set <code>networking.hostName</code> and <code>networking.domain</code> according to <code>name<code> attribute."
-          + " The host name and domain should not be set in some cases, e.g., if you want to obtain it from a DHCP server (if using DHCP).";
+        description = "Whether to enable powersaving.";
       };
 
-      numLockOn = mkOption {
-        type = types.nullOr types.bool;
+      smart = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable S.M.A.R.T. monitoring system.";
+      };
+
+      sound = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable support for soundcards.";
+      };
+
+      wifi = mkOption {
+        type = types.either types.bool (types.either types.path types.str);
+        default = false;
+        description = "Whether to enable support for WiFi (<code>false</code> disabled;"
+          + " <code>true</code> for Network Manager; <code>/path/to/wpa_supplicant.conf</code> as of path or string datatype for WPA Supplicant).";
+      };
+
+    };
+
+    boot = {
+
+      platform = mkOption {
+        type = types.nullOr (types.enum [ "bios" "efi" ]);
         default = null;
-        description = "Turns on (true) or off (false) the numlock key in X sessions. Null value does not affect the numlock key state.";
+        description = "Boot platform to enable a corresponding boot-loader: BIOS, EFI, or unset (<code>null</code> value to skip the boot-loader configuration).";
       };
 
-      systemPackages = mkOption {
-        type = types.listOf types.package;
-        default = [ ];
-        description = "The set of packages (for this machine) that appear in <code>/run/current-system/sw</code>."
-          + " These packages are automatically available to all users, and are automatically updated every time you rebuild the system configuration.";
-      };
-
-      etcFilesMatch = {
-
-        separator = mkOption {
-          type = types.str;
-          default = "=";
-          description = "Separator for matching the suffix in filenames of etc files.";
-        };
-
-        suffix = mkOption {
-          type = types.nullOr types.str;
-          default = hostNameFromName cfg.name;
-          description = "Required suffix, e.g., the name of the machine, for etc files if there is the separator in their filenames.";
-        };
-
-      };
-
-      etcFilesDirs = mkOption {
-        type = types.listOf (types.either types.path types.str);
-        default = [ ];
-        description = "List of directories (by paths or strings; paths are stored in a public nix-store, strings are not stored and can be in a secure path)."
-          + " The content of the directories will be symlinked to the etc directory by <code>environment.etc</code>.";
-      };
-
-      udev = mkOption {
+      extra = mkOption {
         type = types.attrs;
         default = { };
-        description = "Configuration of NixOS <code>services.udev</code> option, e.g., to set extra rules of HW database.";
+        description = "Extra configuration of NixOS <code>boot</code> option.";
       };
 
-      hardware = {
+    };
 
-        backlight = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Whether to enable backlight control.";
-        };
+    mount = {
 
-        bluetooth = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Whether to enable support for Bluetooth.";
-        };
-
-        chipsetVendors = mkOption {
-          type = types.listOf (types.enum [ "intel" "amd" "nvidia" ]);
-          default = [ ];
-          description = "List of supported chipset vendors: Intel, AMD, NVidia, etc.";
-        };
-
-        cpuCores = mkOption {
-          type = types.ints.positive;
-          default = 1;
-          description = "Number of CPU cores for parallel building.";
-        };
-
-        lidSwitch = mkOption {
-          default = "suspend";
-          type = types.enum [ "ignore" "poweroff" "reboot" "halt" "kexec" "suspend" "hibernate" "hybrid-sleep" "lock" ];
-          description = "Specifies what to be done when the laptop lid is closed.";
-        };
-
-        powersaving = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Whether to enable powersaving.";
-        };
-
-        smart = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Whether to enable S.M.A.R.T. monitoring system.";
-        };
-
-        sound = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Whether to enable support for soundcards.";
-        };
-
-        wifi = mkOption {
-          type = types.either types.bool (types.either types.path types.str);
-          default = false;
-          description = "Whether to enable support for WiFi (<code>false</code> disabled;"
-            + " <code>true</code> for Network Manager; <code>/path/to/wpa_supplicant.conf</code> as of path or string datatype for WPA Supplicant).";
-        };
-
-      };
-
-      boot = {
-
-        platform = mkOption {
-          type = types.nullOr (types.enum [ "bios" "efi" ]);
-          default = null;
-          description = "Boot platform to enable a corresponding boot-loader: BIOS, EFI, or unset (<code>null</code> value to skip the boot-loader configuration).";
-        };
-
-        extra = mkOption {
-          type = types.attrs;
-          default = { };
-          description = "Extra configuration of NixOS <code>boot</code> option.";
-        };
-
-      };
-
-      mount = {
-
-        fs = mkOption {
-          type = types.attrs;
-          default = { };
-          description = "Configuration of NixOS <code>fileSystems</code> option.";
-        };
-
-        swap = mkOption {
-          type = types.listOf types.attrs;
-          default = [ ];
-          description = "Configuration of NixOS <code>swapDevices</code> option.";
-        };
-
-        udisks = mkOption {
-          type = types.nullOr (types.enum [ false true "global" "user" ]);
-          default = "user";
-          description = "Whether to enable Udisks (<code>true</code> or <code>false</code>; <code>null</code> value to skip) and if enabled, where to create mount-points:"
-            + " in a global shared directory (<code>/media/VolumeName</code>; which should be on tmpfs), or in a user private directory (<code>/run/media/$USER/VolumeName</code>; which is on tmpfs).";
-        };
-
-      };
-
-      printing = {
-
-        printers = mkOption {
-          type = types.listOf printerModule;
-          default = [ ];
-          description = "Printers for CUPS.";
-        };
-
-        defaultPrinter = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = "CUPS name of the default printer.";
-        };
-
-        webInterfaceUsers = mkOption {
-          type = types.listOf types.str;
-          default = [ "@SYSTEM" ];
-          description = "If not empty, restrict access to the CUPS web interface to a list of user-name or @group-name items.";
-        };
-
-      };
-
-      users = mkOption {
-        type = types.listOf userModule;
-        default = [ ];
-        description = "Additional user accounts to be created automatically by the system. This can also be used to set options for root.";
-      };
-
-      usersExtraGroups = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = "The list of extra groups of the users.";
-      };
-
-      usersHomeFilesMatch = {
-
-        separator = mkOption {
-          type = types.str;
-          default = "=";
-          description = "Separator for matching the suffix in filenames of both user-specific home files.";
-        };
-
-        suffix = mkOption {
-          type = types.nullOr types.str;
-          default = hostNameFromName cfg.name;
-          description = "Required suffix, e.g., the name of the machine, for user-specific home files if there is the separator in their filenames.";
-        };
-
-      };
-
-      mainUser = {
-
-        name = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = "Name of the main (non-root) user.";
-        };
-
-        autoLoginMingetty = mkOption {
-          type = types.bool;
-          default = false;
-          description = "The main user will be automatically logged in at the console.";
-        };
-
-        autoLoginXserver = mkOption {
-          type = types.bool;
-          default = false;
-          description = "The main user will be automatically logged in at the display manager.";
-        };
-
-      };
-
-      home-manager = mkOption {
-        type = types.unspecified;	# FIXME: the unspecified is lambda (user: type of home-manager.users)
-        default = user: { };
-        description = "A function <code>user: { ... }</code> to set home-manager attributes for each defined user.";
-      };
-
-      homeFiles = mkOption {
-        type = types.attrsOf types.unspecified;	# FIXME: the unspecified is lambda (user: types.attrs, i.e., the type of home-manager.users.*.home.file)
+      fs = mkOption {
+        type = types.attrs;
         default = { };
-        description = "Attribute set where the attribute values are functions <code>user: { ... }</code> returning home-manager home files to link link those files into each user home.";
+        description = "Configuration of NixOS <code>fileSystems</code> option.";
       };
 
-      gui = {
-
-        sway = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Whether to enable the tiling Wayland compositor Sway.";
-        };
-
-        xserver = mkOption {
-          type = types.bool;
-          default = (cfg.gui.displayManager != null) || (cfg.gui.windowManager != null) || (cfg.gui.desktopManager != null);
-          description = "Whether to enable the X server.";
-        };
-
-        displayManager = mkOption {
-          type = types.nullOr (types.enum [ "auto" "gdm" "lightdm" "sddm" "slim" "xpra"]);
-          default = null;
-          description = "Display manager to enable.";
-        };
-
-        windowManager = mkOption {
-          type = types.nullOr (types.enum [ "i3" "fluxbox" ]);
-          default = null;
-          description = "Window manager to enable.";
-        };
-
-        desktopManager = mkOption {
-          type = types.nullOr (types.enum [ "gnome3" "lxqt" "mate" "plasma5" "xfce" ]);
-          default = null;
-          description = "Desktop manager to enable.";
-        };
-
+      swap = mkOption {
+        type = types.listOf types.attrs;
+        default = [ ];
+        description = "Configuration of NixOS <code>swapDevices</code> option.";
       };
+
+      udisks = mkOption {
+        type = types.nullOr (types.enum [ false true "global" "user" ]);
+        default = "user";
+        description = "Whether to enable Udisks (<code>true</code> or <code>false</code>; <code>null</code> value to skip) and if enabled, where to create mount-points:"
+          + " in a global shared directory (<code>/media/VolumeName</code>; which should be on tmpfs), or in a user private directory (<code>/run/media/$USER/VolumeName</code>; which is on tmpfs).";
+      };
+
+    };
+
+    printing = {
+
+      printers = mkOption {
+        type = types.listOf printerModule;
+        default = [ ];
+        description = "Printers for CUPS.";
+      };
+
+      defaultPrinter = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "CUPS name of the default printer.";
+      };
+
+      webInterfaceUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "@SYSTEM" ];
+        description = "If not empty, restrict access to the CUPS web interface to a list of user-name or @group-name items.";
+      };
+
+    };
+
+    users = mkOption {
+      type = types.listOf userModule;
+      default = [ ];
+      description = "Additional user accounts to be created automatically by the system. This can also be used to set options for root.";
+    };
+
+    usersExtraGroups = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "The list of extra groups of the users.";
+    };
+
+    usersHomeFilesMatch = {
+
+      separator = mkOption {
+        type = types.str;
+        default = "=";
+        description = "Separator for matching the suffix in filenames of both user-specific home files.";
+      };
+
+      suffix = mkOption {
+        type = types.nullOr types.str;
+        default = hostNameFromName cfg.name;
+        description = "Required suffix, e.g., the name of the machine, for user-specific home files if there is the separator in their filenames.";
+      };
+
+    };
+
+    mainUser = {
+
+      name = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Name of the main (non-root) user.";
+      };
+
+      autoLoginMingetty = mkOption {
+        type = types.bool;
+        default = false;
+        description = "The main user will be automatically logged in at the console.";
+      };
+
+      autoLoginXserver = mkOption {
+        type = types.bool;
+        default = false;
+        description = "The main user will be automatically logged in at the display manager.";
+      };
+
+    };
+
+    home-manager = mkOption {
+      type = types.unspecified;	# FIXME: the unspecified is lambda (user: type of home-manager.users)
+      default = user: { };
+      description = "A function <code>user: { ... }</code> to set home-manager attributes for each defined user.";
+    };
+
+    homeFiles = mkOption {
+      type = types.attrsOf types.unspecified;	# FIXME: the unspecified is lambda (user: types.attrs, i.e., the type of home-manager.users.*.home.file)
+      default = { };
+      description = "Attribute set where the attribute values are functions <code>user: { ... }</code> returning home-manager home files to link link those files into each user home.";
+    };
+
+    gui = {
+
+      sway = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the tiling Wayland compositor Sway.";
+      };
+
+      xserver = mkOption {
+        type = types.bool;
+        default = (cfg.gui.displayManager != null) || (cfg.gui.windowManager != null) || (cfg.gui.desktopManager != null);
+        description = "Whether to enable the X server.";
+      };
+
+      displayManager = mkOption {
+        type = types.nullOr (types.enum [ "auto" "gdm" "lightdm" "sddm" "slim" "xpra"]);
+        default = null;
+        description = "Display manager to enable.";
+      };
+
+      windowManager = mkOption {
+        type = types.nullOr (types.enum [ "i3" "fluxbox" ]);
+        default = null;
+        description = "Window manager to enable.";
+      };
+
+      desktopManager = mkOption {
+        type = types.nullOr (types.enum [ "gnome3" "lxqt" "mate" "plasma5" "xfce" ]);
+        default = null;
+        description = "Desktop manager to enable.";
+      };
+
+    };
 
   };
 
