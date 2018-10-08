@@ -35,11 +35,11 @@ let
   plat = {
     "i686-linux" = "i386";
     "x86_64-linux" = "amd64";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   sha256 = {
     "i686-linux" = "16y3sv6cbg71r55kqdqj30szhgnsgk17jpf6j2w7qixl3n233z1b";
     "x86_64-linux" = "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   version = "7.1.8.3036";
 in
 

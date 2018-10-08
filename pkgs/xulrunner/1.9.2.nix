@@ -6,11 +6,11 @@ let
   plat = {
     "i686-linux" = "linux-i686";
     "x86_64-linux" = "linux-x86_64";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   sha256 = {
     "i686-linux" = "e9f2032d72df3d917323deb0e75b9678232544b0f13d42b5f18a8f89d149f64c";
     "x86_64-linux" = "aaedeb439b0834c7b83a43a03da52ae1532daff1e706772dcf98d9e5b755c43d";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   versionParts = builtins.splitVersion version;
   versionMajor = builtins.elemAt versionParts 0 + "." + builtins.elemAt versionParts 1 + "." + builtins.elemAt versionParts 2;
   versionMinor = builtins.elemAt versionParts 3;

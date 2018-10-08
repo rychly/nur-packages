@@ -24,15 +24,15 @@ let
   plat = {
     "i686-linux" = "i386";
     "x86_64-linux" = "amd64";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   platBits = {
     "i686-linux" = "32";
     "x86_64-linux" = "64";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   sha256 = {
     "i686-linux" = "88b19c64708f1e7ca0d2300b8931f57932762fd76f6fb439e16f33d60847b05e";
     "x86_64-linux" = "49ae6df44322084b10ea48335d60347d049d0ef05ab8ae38e15adbcd5eec1130";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   versionParts = builtins.split "build" version;
   versionMain = builtins.elemAt versionParts 0;
   versionMainParts = builtins.splitVersion versionMain;

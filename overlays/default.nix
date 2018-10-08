@@ -106,7 +106,6 @@
     # FIXME: automatically check if the pkgs-custom versions are newer than pkgs versions
     adbfs-rootless = pkgs-custom.adbfs-rootless;
     googleearth = pkgs-custom.googleearth;
-    ipmiview = pkgs-custom.ipmiview;
   };
 
 }

@@ -15,11 +15,11 @@ let
   plat = {
     "i686-linux" = "Linux32";
     "x86_64-linux" = "Linux64";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   sha256 = {
     "i686-linux" = "da146f1f872c028f1a64b7e8ec789a94dbe993da9216b5bf815ceb0b673bebca";
     "x86_64-linux" = "0470e6e23d1c5beab5d08d7539c752512c492ae2982c6ca4ebfd580124042b74";
-  }.${stdenv.system};
+  }.${stdenv.buildPlatform.system};
   prolog = {
     "sicstus" = "SICStus";
     "swi" = "SWI";
