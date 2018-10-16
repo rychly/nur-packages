@@ -25,13 +25,27 @@ with pkgs; rec {
   konwert = callPackage ./konwert { };
   libjpeg-extra = callPackage ./libjpeg-extra { };
   lingea-trd-decoder = callPackage ./lingea-trd-decoder { };
-  modelio = callPackage ./modelio {
+  modelio36 = callPackage ./modelio/default36.nix {
     inherit xulrunner192;
     plugins = [];
   };
-  modelio-plugin-ba = callPackage ./modelio-plugins/ba.nix { };
-  modelio-plugin-sa = callPackage ./modelio-plugins/sa.nix { };
-  modelio-plugin-sd = callPackage ./modelio-plugins/sd.nix { };
+  modelio-plugin-ba36 = callPackage ./modelio-plugins/ba36.nix { };
+  modelio-plugin-sa36 = callPackage ./modelio-plugins/sa36.nix { };
+  modelio-plugin-sd36 = callPackage ./modelio-plugins/sd36.nix { };
+  modelio37 = callPackage ./modelio/default37.nix {
+    inherit xulrunner192;
+    plugins = [];
+  };
+  modelio-plugin-ba37 = callPackage ./modelio-plugins/ba37.nix { };
+  modelio-plugin-sa37 = callPackage ./modelio-plugins/sa37.nix { };
+  modelio-plugin-sd37 = callPackage ./modelio-plugins/sd37.nix { };
+  modelio38 = callPackage ./modelio/default38.nix {
+    inherit xulrunner192;
+    plugins = [];
+  };
+  modelio-plugin-ba38 = callPackage ./modelio-plugins/ba38.nix { };
+  modelio-plugin-sa38 = callPackage ./modelio-plugins/sa38.nix { };
+  modelio-plugin-sd38 = callPackage ./modelio-plugins/sd38.nix { };
   pan-baidu-download = callPackage ./pan-baidu-download { };
   pass-git-helper = callPackage ./pass-git-helper { };
   pass-menu = callPackage ./pass-menu { };

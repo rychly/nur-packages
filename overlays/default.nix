@@ -53,11 +53,25 @@
 
   modelioWithAllPlugins = self: super: {
     # Modelio plugins
-    modelio = pkgs-custom.modelio.override {
+    modelio36 = pkgs-custom.modelio36.override {
       plugins = [
-        pkgs-custom.modelio-plugin-ba
-        pkgs-custom.modelio-plugin-sa
-        pkgs-custom.modelio-plugin-sd
+        pkgs-custom.modelio-plugin-ba36
+        pkgs-custom.modelio-plugin-sa36
+        pkgs-custom.modelio-plugin-sd36
+      ];
+    };
+    modelio37 = pkgs-custom.modelio37.override {
+      plugins = [
+        pkgs-custom.modelio-plugin-ba37
+        pkgs-custom.modelio-plugin-sa37
+        pkgs-custom.modelio-plugin-sd37
+      ];
+    };
+    modelio38 = pkgs-custom.modelio38.override {
+      plugins = [
+        pkgs-custom.modelio-plugin-ba38
+        pkgs-custom.modelio-plugin-sa38
+        pkgs-custom.modelio-plugin-sd38
       ];
     };
   };

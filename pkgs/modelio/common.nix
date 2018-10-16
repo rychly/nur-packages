@@ -8,6 +8,7 @@
 , xulrunner192
 # wrapping for plugins
 , plugins, symlinkJoin
+, version, fileNamePrefixWithoutPlat, sha256x86, sha256x64
 }:
 
 let
@@ -30,15 +31,15 @@ let
     "x86_64-linux" = "64";
   }.${stdenv.buildPlatform.system};
   sha256 = {
-    "i686-linux" = "88b19c64708f1e7ca0d2300b8931f57932762fd76f6fb439e16f33d60847b05e";
-    "x86_64-linux" = "49ae6df44322084b10ea48335d60347d049d0ef05ab8ae38e15adbcd5eec1130";
+    "i686-linux" = sha256x86;
+    "x86_64-linux" = sha256x64;
   }.${stdenv.buildPlatform.system};
   versionParts = builtins.split "build" version;
   versionMain = builtins.elemAt versionParts 0;
   versionMainParts = builtins.splitVersion versionMain;
   versionMajor = builtins.elemAt versionMainParts 0 + "." + builtins.elemAt versionMainParts 1;
+  versionMajorDash = builtins.elemAt versionMainParts 0 + "-" + builtins.elemAt versionMainParts 1;
   versionBuild = builtins.elemAt versionParts 2;	# idx 2, not idx 1 which is an empty list for the separator
-  version = "3.7.1build201803142330";	# from dpkg:/control file, Version attribute
 
 
   unwrapped = stdenv.mkDerivation rec {
@@ -50,8 +51,8 @@ let
     inherit versionMajor;
 
     src = requireFile rec {
-      name = "modelio-${versionMain}-modeler-${plat}.deb";
-      url = "https://www.modeliosoft.com/en/download/download-products.html";
+      name = "${fileNamePrefixWithoutPlat}${plat}.deb";
+      url = "https://www.modeliosoft.com/en/downloads/modeliosoft-products/modelio-${versionMajorDash}-x.html";
       inherit sha256;
       message = ''
         This Nix expression requires that ${name} already be part of the store. To

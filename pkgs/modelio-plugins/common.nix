@@ -1,5 +1,5 @@
 { stdenv, requireFile, dpkg
-, version, sha256, abbr, description, homepage
+, version, fileName, sha256, abbr, description, homepage
 }:
 
 let
@@ -7,6 +7,7 @@ let
   versionMain = builtins.elemAt versionParts 0;
   versionMainParts = builtins.splitVersion versionMain;
   versionMajor = builtins.elemAt versionMainParts 0 + "." + builtins.elemAt versionMainParts 1;
+  versionMajorDash = builtins.elemAt versionMainParts 0 + "-" + builtins.elemAt versionMainParts 1;
   versionBuild = builtins.elemAt versionParts 2;	# idx 2, not idx 1 which is an empty list for the separator
   #version = "A.B.CbuildYYYYMMDDHHMM";	# from dpkg:/control file, Version attribute
   abbrLower = stdenv.lib.toLower abbr;
@@ -20,8 +21,8 @@ stdenv.mkDerivation rec {
   inherit versionMajor;
 
   src = requireFile rec {
-    name = "modelio-${versionMain}-${abbr}.deb";
-    url = "https://www.modeliosoft.com/en/download/download-products.html#modelio_${abbrLower}";
+    name = fileName;
+    url = "https://www.modeliosoft.com/en/downloads/modeliosoft-products/modelio-${versionMajorDash}-x.html";
     inherit sha256;
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
