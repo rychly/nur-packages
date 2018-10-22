@@ -29,13 +29,17 @@ let
       inherit sha256;
     };
 
+    postPatch = ''
+      sed -i "s|^\\(moz_libdir=\\).*\$|\\1$out/lib/xulrunner|" ./xulrunner
+    '';
+
     dontConfigure = true;
     dontBuild = true;
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/lib
-      mv $sourceRoot $out/lib/xulrunner
+      mkdir -p $out/lib/xulrunner
+      mv ./* $out/lib/xulrunner/
       runHook postInstall
     '';
 
