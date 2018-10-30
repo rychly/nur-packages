@@ -197,6 +197,12 @@ let
         description = "Specifies what to be done when the laptop lid is closed.";
       };
 
+      powerKey = mkOption {
+        default = null;
+        type = types.nullOr (types.enum [ "ignore" "poweroff" "reboot" "halt" "kexec" "suspend" "hibernate" "hybrid-sleep" "lock" ]);
+        description = "Specifies how to handle the system power to trigger actions such as system power-off or suspend.";
+      };
+
       powersaving = mkOption {
         type = types.bool;
         default = true;
@@ -515,6 +521,9 @@ in {
     zramSwap.numDevices = cfg.hardware.cpuCores;
 
     services.logind.lidSwitch = cfg.hardware.lidSwitch;
+    services.logind.extraConfig = mkIf (cfg.hardware.powerKey != null) ''
+      HandlePowerKey=${cfg.hardware.powerKey}
+    '';
 
     powerManagement.cpuFreqGovernor = mkIf (cfg.hardware.powersaving) (lib.mkDefault "powersave");
     services.tlp.enable = mkIf (cfg.hardware.powersaving) true;	# For optimal power management (better than pmutils)
