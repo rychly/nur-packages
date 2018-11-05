@@ -122,4 +122,11 @@
     googleearth = pkgs-custom.googleearth;
   };
 
+  freshRelease = self: super: let
+    pkgsRelease = import ( fetchTarball "https://github.com/NixOS/nixpkgs/archive/release-${super.lib.versions.majorMinor super.lib.version}.tar.gz" ) { };
+  in {
+    # fresh stable release packages beyond the staging stable release/channel
+    jetbrains = pkgsRelease.jetbrains;
+  };
+
 }
