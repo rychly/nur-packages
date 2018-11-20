@@ -119,14 +119,11 @@
   versionUpdates = self: super: {
     # FIXME: automatically check if the pkgs-custom versions are newer than pkgs versions
     adbfs-rootless = pkgs-custom.adbfs-rootless;
-    googleearth = pkgs-custom.googleearth;
   };
 
-  freshRelease = self: super: let
-    pkgsRelease = import ( fetchTarball "https://github.com/NixOS/nixpkgs/archive/release-${super.lib.versions.majorMinor super.lib.version}.tar.gz" ) { };
-  in {
+  freshRelease = self: super: {
     # fresh stable release packages beyond the staging stable release/channel
-    jetbrains = pkgsRelease.jetbrains;
+    jetbrains = (lib-custom.pkgs-git-release super).jetbrains;
   };
 
 }

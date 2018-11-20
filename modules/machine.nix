@@ -180,9 +180,15 @@ let
       };
 
       chipsetVendors = mkOption {
-        type = types.listOf (types.enum [ "intel" "amd" "nvidia" ]);
+        type = types.listOf (types.enum [ "intel-cpu" "amd-cpu" "intel-gpu" "amd-gpu" "nvidia-gpu" ]);
         default = [ ];
-        description = "List of supported chipset vendors: Intel, AMD, NVidia, etc.";
+        description = "List of supported chipset vendors: Intel and AMD for CPUs and GPUs, NVidia for GPUs, etc.";
+      };
+
+      nvidiaGpuDriver = mkOption {
+        type = types.enum [ "nouveau" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304" "nvidiaLegacy173" ];
+        default = "nouveau";
+        description = "Type of open-source or current/legacy proprietary driver for NVidia GPUs (ignored for non-NVidia GPUs).";
       };
 
       cpuCores = mkOption {
@@ -496,22 +502,37 @@ in {
     };
 
     hardware.cpu = builtins.listToAttrs (
-      map (vendor: nameValuePair vendor { updateMicrocode = true; }) (
-        builtins.filter (vendor: (vendor == "intel") || (vendor == "amd"))	# updateMicrocode only for Intel and AMD CPUs
+      map (vendor: nameValuePair (removeSuffix "-cpu" vendor) { updateMicrocode = true; }) (
+        builtins.filter (vendor: (vendor == "intel-cpu") || (vendor == "amd-cpu"))	# updateMicrocode only for Intel and AMD CPUs
         cfg.hardware.chipsetVendors
       )
     );
     hardware.opengl.extraPackages = flatten (map (vendor:
-      if (vendor == "intel") then [
+      if (vendor == "intel-gpu") then [
         pkgs.vaapiIntel	# Intel VA-API
         pkgs.libvdpau-va-gl	# the VDPAU driver with VA-API/OpenGL backend (e.g., for Adobe Flash Player and Mplayer; since there is no VDPAU available on Intel chips)
         pkgs.intel-ocl	# Official Intel OpenCL runtime
       ]
-      else if (vendor == "nvidia") then [
+      else if (vendor == "nvidia-gpu") then [
         pkgs.vaapiVdpau	# HW video decode support in the VAAPI library for VDPAU platforms. e.g. NVIDIA
       ]
       else [ ]) cfg.hardware.chipsetVendors
     );
+    services.xserver.videoDrivers = flatten (map (vendor:
+      if (vendor == "intel-gpu") then [
+        "intel"	# Intel open-source video driver
+      ]
+      else if (vendor == "amd-gpu") then [
+        "ati_unfree"	# AMD/ATI proprietary video driver
+      ]
+      else if (vendor == "nvidia-gpu") then [
+        cfg.hardware.nvidiaGpuDriver	# NVIDIA proprietary video driver of particular type (current or legacy)
+      ]
+      else [ ]) cfg.hardware.chipsetVendors
+    );
+    hardware.nvidia.modesetting = mkIf ((any (vendor: vendor == "nvidia-gpu") cfg.hardware.chipsetVendors) && (cfg.hardware.nvidiaGpuDriver == "nvidia")) {
+      enable = true;
+    };
     virtualisation.virtualbox.guest = mkIf (any (vendor: vendor == "vbox") cfg.hardware.chipsetVendors) {
       enable = true;
     };
