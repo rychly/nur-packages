@@ -6,7 +6,7 @@ let
 
   cfg = config.rychly.multiGlibcLocalePaths;
 
-  lib-custom = import ../lib { inherit pkgs; };
+  lib-custom = import ../lib { };
 
   # A random Nixpkgs revision *before* the default glibc
   # was switched to version 2.27.x (version <= 18.03).

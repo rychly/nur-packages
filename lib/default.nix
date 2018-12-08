@@ -29,6 +29,6 @@ in rec {
   # Get fresh stable release from nixpkgs Git, that is the release beyond the staging stable release/channel
   pkgs-git-release = given-pkgs: let
     majorMinorVersion = given-pkgs.lib.versions.majorMinor given-pkgs.lib.version;
-  in import (fetchNixpkgsGit "release-${majorMinorVersion}") { };
+  in import (fetchNixpkgsGit "release-${majorMinorVersion}") { inherit (given-pkgs) config; };
 
 }
