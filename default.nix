@@ -10,7 +10,7 @@
 
 let
 
-  lib-custom = import ./lib { };
+  lib-custom = import ./lib { inherit lib; };
   pkgs-custom = import ./pkgs { inherit pkgs; };
 
 in {

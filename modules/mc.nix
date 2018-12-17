@@ -97,7 +97,7 @@ in {
 
     environment.systemPackages = [ cfg.mcPackage ];
 
-    rychly.machine.homeFiles.".config/mc/mc.ext" = mkDefault (user: {
+    rychly.users.homeFiles.".config/mc/mc.ext" = mkDefault (user: {
       text = let
         defaultExts = builtins.toPath "${cfg.mcPackage}/etc/mc/mc.ext";
       in

@@ -65,7 +65,7 @@ in {
       '';
     };
 
-    rychly.machine.homeFiles = mkIf (cfg.useSystemDb) {
+    rychly.users.homeFiles = mkIf (cfg.useSystemDb) {
       ".pki/nssdb/pkcs11.txt" = user: {	# text '' below is prefixed by single ' so it is '''
         text = ''
           library=libnsssysinit.so

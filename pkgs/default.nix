@@ -8,6 +8,8 @@ with pkgs; rec {
   adbfs-rootless = callPackage ./adbfs-rootless {
     adb = androidenv.platformTools;
   };
+  bluez-alsa = callPackage ./bluez-alsa { };
+  bluez-alsa-tools = callPackage ./bluez-alsa-tools { };
   ctstream = callPackage ./ctstream { };
   des = callPackage ./des { };
   dex2jar = callPackage ./dex2jar { };
