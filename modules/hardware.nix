@@ -81,7 +81,6 @@ let
 
   ## shortcuts
 
-  wifiEnabled = cfg.wifi != false;	# not false -> true, or a path (or string of the path) to wpa_supplicant.conf
   wifiWpaSupplicant = ! builtins.isBool cfg.wifi;	# not bool -> is the path (or string of the path) to wpa_supplicant.conf
   wifiNetworkManager = cfg.wifi == true;	# true -> not a path to not wpa_supplicant.conf
 
@@ -157,7 +156,7 @@ in {
     sound.enable = cfg.sound;
 
     networking.wireless = {
-      enable = wifiEnabled;
+      enable = wifiWpaSupplicant;	# can be enabled only if NetworkManager is disabled, so if we have wpa_supplicant
       userControlled.enable = wifiWpaSupplicant;	# enabled only for wpa_supplicant to control it via wpa_cli/wpa_gui
       networks = { };	# if empty wpa_supplicant will use /etc/wpa_supplicant.conf as the configuration file, which is symlinked to the secure storage
     };

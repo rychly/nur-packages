@@ -156,7 +156,7 @@ in {
     services.xserver.displayManager = {
       auto = mkIf (cfg.mainUser.autoLoginXserver) {
         enable = mkDefault true;
-        user = mkDefault cfg.mainUser.name;
+        user = cfg.mainUser.name;
       };
       gdm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
         enable = true;
@@ -164,7 +164,7 @@ in {
       };
       lightdm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
         enable = true;
-        user = cfg.mainUser.name;
+        user = mkDefault cfg.mainUser.name;
       };
       sddm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
         enable = true;
