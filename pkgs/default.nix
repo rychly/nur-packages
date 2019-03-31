@@ -22,6 +22,7 @@ with pkgs; rec {
   h2status = callPackage ./h2status { };
   hunspellDictCs = callPackage ./hunspell-dicts/ooa-cs.nix { };
   imgrepackerrk = callPackage_i686 ./imgrepackerrk { };
+  ipmiview = callPackage ./ipmiview { };
   jad = callPackage_i686 ./jad { };
   konwert = callPackage ./konwert { };
   libjpeg-extra = callPackage ./libjpeg-extra { };
