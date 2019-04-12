@@ -148,9 +148,6 @@ in {
       };
     } ) (filter (user: user.addToUsersUsers) cfg.users));
 
-    # web-browser Profile Sync Daemon will be activated for all users
-    services.psd.users = map (user: user.nixOsUser.name) cfg.users;
-
     # auto-login
     services.mingetty.autologinUser = mkIf (cfg.mainUser.autoLoginMingetty) cfg.mainUser.name;
     services.xserver.displayManager = {

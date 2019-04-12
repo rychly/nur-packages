@@ -6,7 +6,7 @@ with pkgs; rec {
   # Only packages should be here, e.g., not lists, sets, etc. of packages as those cannot be detected by `../non-broken-and-unfree.nix` (i.e., do not use `pkgs.recurseIntoAttrs`).
 
   adbfs-rootless = callPackage ./adbfs-rootless {
-    adb = androidenv.platformTools;
+    adb = androidenv.androidPkgs_9_0.platform-tools;
   };
   bluez-alsa = callPackage ./bluez-alsa { };
   bluez-alsa-tools = callPackage ./bluez-alsa-tools { };
