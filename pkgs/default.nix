@@ -48,6 +48,7 @@ with pkgs; rec {
   modelio-plugin-ba38 = callPackage ./modelio-plugins/ba38.nix { };
   modelio-plugin-sa38 = callPackage ./modelio-plugins/sa38.nix { };
   modelio-plugin-sd38 = callPackage ./modelio-plugins/sd38.nix { };
+  oracle-instantclient = callPackage ./oracle-instantclient { };
   pan-baidu-download = callPackage ./pan-baidu-download { };
   pass-git-helper = callPackage ./pass-git-helper { };
   pass-menu = callPackage ./pass-menu { };
@@ -66,6 +67,7 @@ with pkgs; rec {
   };
   setlayout = callPackage ./setlayout { };
   soapui = callPackage ./soapui { };
+  sqldeveloper = callPackage ./sqldeveloper { };
   stardict-lingea-lexicon = callPackage ./stardict-lingea-lexicon {
     inherit stardict-tools;
   };
