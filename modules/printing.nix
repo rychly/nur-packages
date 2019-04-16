@@ -101,7 +101,12 @@ in {
     # CUPS printers
     systemd.services.cups = {
       postStart = mkAfter (concatStringsSep "\n" (
+        # wait for cupsd listening to port/socket
+        [ ''
+          for I in $(seq 3); do lpstat >/dev/null 2>&1 && break; sleep 1; done
+        '' ]
         # remove all printers
+        ++
         [ ''
           for I in $(lpstat -a | cut -d ' ' -f 1); do lpadmin -x "$I"; done
         '' ]
