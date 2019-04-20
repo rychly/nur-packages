@@ -103,7 +103,7 @@ in {
       postStart = mkAfter (concatStringsSep "\n" (
         # wait for cupsd listening to port/socket
         [ ''
-          for I in $(seq 3); do lpstat >/dev/null 2>&1 && break; sleep 1; done
+          for I in $(seq 10); do lpstat >/dev/null 2>&1 && break; sleep 1; done
         '' ]
         # remove all printers
         ++
