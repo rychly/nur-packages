@@ -70,6 +70,12 @@ let
       description = "Whether to enable support for soundcards.";
     };
 
+    ssd = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to enable SSD optimizations (tmpfs, profile-sync-daemon, etc.).";
+    };
+
     wifi = mkOption {
       type = types.either types.bool (types.either types.path types.str);
       default = false;
@@ -154,6 +160,9 @@ in {
     services.smartd.enable = cfg.smart;
 
     sound.enable = cfg.sound;
+
+    services.psd.enable = mkIf (cfg.ssd) true;	# web-browser Profile Sync daemon for SSD optimisation
+    boot.tmpOnTmpfs = mkIf (cfg.ssd) true;
 
     networking.wireless = {
       enable = wifiWpaSupplicant;	# can be enabled only if NetworkManager is disabled, so if we have wpa_supplicant
