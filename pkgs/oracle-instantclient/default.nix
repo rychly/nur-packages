@@ -5,7 +5,7 @@ assert odbcSupport -> unixODBC != null;
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  version = "18.3.0.0.0dbru_18.5.0.0.0dbru";
+  version = "19.3.0.0.0dbru_19.3.0.0.0dbru";
   versionArchs = builtins.split "_" version;
   myVersion = {
     "i686-linux" = builtins.elemAt versionArchs 0;
@@ -29,15 +29,15 @@ let
 
   srcs = {
     "i686-linux" = [
-      (requireSource "basic" arch myVersion "2" "1ggg3hf89vxmbqdcbcldz1gdr4i2himrxazpg23sbp23b3r2y8w1")
-      (requireSource "sdk" arch myVersion "2" "08w44k3jnp5iq0j9l772fgq39xdjny7f07m34axb2xp9ckm762j1")
-      (requireSource "sqlplus" arch myVersion "2" "15ckc83i5xqiadl4i9092r347f2px8if9q88gz0xw9ah376k4lr0") ]
-      ++ optional odbcSupport (requireSource "odbc" arch myVersion "2" "1ppjhh12plc81ikngw4h2mjfq7md9jja2px29y811vpw8blyl5kf");
+      (requireSource "basic" arch myVersion "2" "0rns440v0biak7n3y36fipigi0mh9917hiblda2qf37a4k06ms5b")
+      (requireSource "sdk" arch myVersion "2" "1gza6jnraqd6d951x6d4bm792w8cahn7h51r4q2jqm53cp3nxdi1")
+      (requireSource "sqlplus" arch myVersion "2" "0nl9kk18sw45nj5hnn5fnicbdg6rxs9gp2z8qwqzwmrs3jcnqyv3") ]
+      ++ optional odbcSupport (requireSource "odbc" arch myVersion "2" "06bs63bawa2mkzaiifrwvslniz4wj3fswc8dqq4rr0z1a6p2wjk3");
     "x86_64-linux" = [
-      (requireSource "basic" arch myVersion "" "1mw5dp7rgp02sgqhfvy8bzjs1p3gwapknf7kf5fq9q6pw9w6gblx")
-      (requireSource "sdk" arch myVersion "" "191zjcy1cw83hmwgzlhanmvbsn35bvwcb4w6s2iidri48acgrg1b")
-      (requireSource "sqlplus" arch myVersion "" "09360fb2kicgm5827333p6pjc6szh5994h0ija72083s1y4d94af") ]
-      ++ optional odbcSupport (requireSource "odbc" arch myVersion "2" "08jqfwyk5hs393c0xbxh1bd8ilq6p0nc8zr34qyw7012hbqvgx3n");
+      (requireSource "basic" arch myVersion "" "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy")
+      (requireSource "sdk" arch myVersion "" "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99")
+      (requireSource "sqlplus" arch myVersion "" "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5") ]
+      ++ optional odbcSupport (requireSource "odbc" arch myVersion "2" "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch");
   }."${stdenv.hostPlatform.system}" or throwSystem;
 
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
