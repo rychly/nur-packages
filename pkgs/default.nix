@@ -10,6 +10,9 @@ with pkgs; rec {
   };
   bluez-alsa = callPackage ./bluez-alsa { };
   bluez-alsa-tools = callPackage ./bluez-alsa-tools { };
+  convert-charsets = callPackage ./convert-charsets {
+    inherit (pkgs.luaPackages) buildLuaPackage wrapLua;
+  };
   ctstream = callPackage ./ctstream { };
   des = callPackage ./des { };
   dex2jar = callPackage ./dex2jar { };
