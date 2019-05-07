@@ -1,32 +1,25 @@
-{ stdenv, fetchFromGitHub, fetchurl, gradle, perl, makeWrapper
+{ stdenv, fetchgit, gradle, perl, makeWrapper
+, git
 , jre
 }:
 
 let
-  version = "2.1-nightly-28";
-  name = "dex2jar-${version}";
-  src = fetchFromGitHub {
-    owner = "pxb1988";
-    repo = "dex2jar";
-    rev = version;
-    sha256 = "04xr6j3s4mgvhihvjhx0hm3kqhyvnbyb14kvvfazm1g1i6ni65pk";
+  version = "2019.05.07";
+  plainName = "gphotos-uploader";
+  className = "io.gitlab.rychly.gphotos_uploader.GPhotosUploader";
+  name = "${plainName}-${version}";
+  src = fetchgit {
+    url = "https://gitlab.com/rychly/gphotos-uploader.git";
+    rev = "9f27e7935f925d765e7dbe24358905cbf353092e";
+    sha256 = "1i7h9ksgngfxc0bkaskcl321ywb843jc7b6zn6f8y1rx07il1cx5";
   };
-  # [PATCH] update dx from 1.7 to 23.0.0
-  srcPatchDx = fetchurl {
-    url = "https://github.com/pxb1988/dex2jar/commit/c4bec2d2ec14d282667fe8241510d15ef85a3cfe.patch";
-    sha256 = "d344460ed88a29230cb47bee35f749e57a60c77732bfd402516dbfe7c157bf00";
-  };
-  # reverse the DX 1.7=>23.0.0 patch to fix issue https://github.com/pxb1988/dex2jar/issues/140
-  # we need to skip tests by "build --exclude-task test" as com.googlecode.dex2jar.ir.test.RemoveConstantFromSSATest > t004 FAILED
-  patches = [ srcPatchDx ];
-  patchFlags = [ "-p1 --reverse" ];	# each flags item applies on its corresponing patches item
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {	# cannot be a recursive derivation as we reffer to the name in the let
     name = "${name}-deps";
-    inherit src patches patchFlags;
+    inherit src;
     # disable fixupPhase as it can modify the resulting directory structure of the repository (e.g., move {man,doc,info} dirs into the share dir)
     phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" ];
-    buildInputs = [ gradle perl ];
+    buildInputs = [ git gradle perl ];
     buildPhase = ''
       runHook preBuild
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -43,49 +36,44 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1qqs8kp1xc71kvrgrd5m1w80qyppypsz490zwcrfzkwnlivz8085";
+    outputHash = "1q6wfdqf9b49mgm3z9zjigk45098q65ndxzxiankg2lx9k7fg4f6";
   };
 
 in stdenv.mkDerivation rec {
-  inherit name src patches patchFlags;
+  inherit name src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gradle ];
+  buildInputs = [ git gradle ];
 
   buildPhase = ''
     runHook preBuild
     export GRADLE_USER_HOME=$(mktemp -d)
     substituteInPlace build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
+      --replace 'jcenter()' 'mavenLocal(); maven { url uri("${deps}") }'
     gradle --offline --no-daemon build --exclude-task test
     runHook postBuild
   '';
 
   preInstall = ''
     mkdir ./target
-    tar -xf ./dex-tools/build/distributions/dex-tools-*.tar -C ./target
+    tar -xf ./build/distributions/gphotos-uploader-*.tar -C ./target
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share/java}
-    cd ./target/*	# switch to the distribution directory
-    mv ./lib/*.jar $out/share/java/
+    mv ./target/*/lib/*.jar $out/share/java/	# move JARs from the distribution directory
     unset CLASSPATH
     for I in $out/share/java/*.jar; do
       CLASSPATH=$CLASSPATH''${CLASSPATH:+:}$I
     done
-    for I in d2j-*.sh; do	# must be just filenames without a path
-      CLASSNAME=$(grep -o 'com\.googlecode\.[^\"]*' $I)
-      makeWrapper ${jre}/bin/java $out/bin/''${I%.sh} \
-        --add-flags "-cp $CLASSPATH $CLASSNAME"
-    done
+    makeWrapper ${jre}/bin/java $out/bin/${plainName} --add-flags "-cp $CLASSPATH ${className}"
     runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pxb1988/dex2jar;
-    description = "Tools to work with android .dex and java .class files";
+    homepage = https://gitlab.com/rychly/gphotos-uploader/;
+    description = "Uploads missing media files from given directories into Google Photos and control their sharing";
     license = licenses.asl20;
     #maintainers = [ maintainers.rychly ];	# TODO: register as the package maintainer
     platforms = platforms.unix;

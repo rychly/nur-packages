@@ -22,6 +22,7 @@ with pkgs; rec {
   esmska = callPackage ./esmska { };
   flickcurl = callPackage ./flickcurl { };
   getaddrinfo-tcp = callPackage ./getaddrinfo-tcp { };
+  gphotos-uploader = callPackage ./gphotos-uploader { };
   h2status = callPackage ./h2status { };
   hunspellDictCs = callPackage ./hunspell-dicts/ooa-cs.nix { };
   imgrepackerrk = callPackage_i686 ./imgrepackerrk { };
