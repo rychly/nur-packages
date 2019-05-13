@@ -11,7 +11,7 @@ with pkgs; rec {
   bluez-alsa = callPackage ./bluez-alsa { };
   bluez-alsa-tools = callPackage ./bluez-alsa-tools { };
   convert-charsets = callPackage ./convert-charsets {
-    inherit (pkgs.luaPackages) buildLuaPackage wrapLua;
+    inherit (pkgs.luaPackages) buildLuaPackage luaOlder wrapLua;
   };
   ctstream = callPackage ./ctstream { };
   des = callPackage ./des { };
@@ -31,6 +31,13 @@ with pkgs; rec {
   konwert = callPackage ./konwert { };
   libjpeg-extra = callPackage ./libjpeg-extra { };
   lingea-trd-decoder = callPackage ./lingea-trd-decoder { };
+  luasql-oci8 = callPackage ./luasql-oci8 {
+    inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder;
+    inherit oracle-instantclient;
+  };
+  luaxmlrpc = callPackage ./luaxmlrpc {
+    inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder luaAtLeast luaexpat luasocket;
+  };
   modelio36 = callPackage ./modelio/default36.nix {
     inherit xulrunner192;
     plugins = [];

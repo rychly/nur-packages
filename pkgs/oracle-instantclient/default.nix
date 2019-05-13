@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
 
     # PECL::oci8 will not build without this
     # this symlink only exists in dist zipfiles for some platforms
-    ln -sfn $out/lib/libclntsh${extLib}.${baseVersion} $out/lib/libclntsh${extLib}
+    [[ -e "$out/lib/libclntsh${extLib}" ]] || ln -sfn $out/lib/libclntsh${extLib}.${baseVersion} $out/lib/libclntsh${extLib}
   '';
 
   meta = with stdenv.lib; {

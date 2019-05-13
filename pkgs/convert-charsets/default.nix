@@ -1,8 +1,8 @@
-{ stdenv, buildLuaPackage, fetchgit, wrapLua
+{ stdenv, buildLuaPackage, luaOlder, fetchgit, wrapLua
 }:
 
 let
-  version = "2019.05.06";
+  version = "2019.05.10";
 in
 
 buildLuaPackage {
@@ -11,10 +11,11 @@ buildLuaPackage {
 
   src = fetchgit {
     url = "https://gitlab.com/rychly/convert-charsets.git";
-    rev = "6dd2a16aa2a80589dad0f66806d654ff148540e4";
-    sha256 = "085v9g6k5gaks92k7pfjb4lsnsq1pkl2md6l1c0i85xa6ajnw2d8";
+    rev = "2ce359e042be9bbdb2ad7c074354185f5d1267fd";
+    sha256 = "1h7fsga2zdw7yvma3iyriy8spm9hagrqgmqlhcy8as3qkxmbhw4a";
   };
 
+  disabled = ( luaOlder "5.1" );
   buildInputs = [ wrapLua ];
 
   postFixup = ''
@@ -22,9 +23,10 @@ buildLuaPackage {
   '';
 
   meta = with stdenv.lib; {
-    description = "Lua scripts to convert strings between UTF-8 and other charsets and from UTF-8 to ASCII";
+    description = "Lua scripts to convert strings between UTF-8 and other charsets and from UTF-8 to ASCII and SGML";
     homepage = https://gitlab.com/rychly/convert-charsets;
+    license = licenses.gpl2;
     #maintainers = [ maintainers.rychly ];	# TODO: register as the package maintainer
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
