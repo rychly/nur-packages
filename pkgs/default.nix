@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, lib ? pkgs.lib, lib-custom ? import ../lib { inherit lib; }}:
 
 with pkgs; rec {
 
@@ -41,6 +41,9 @@ with pkgs; rec {
   modelio36 = callPackage ./modelio/default36.nix {
     inherit xulrunner192;
     plugins = [];
+    # fixed https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=898960 and https://github.com/gentoo/gentoo/
+    # load gtk2 including pango-1.43.0 from v19.09 or Git master
+    gtk2 = (lib-custom.pkgs-in-version pkgs "19.09").gtk2;
   };
   modelio-plugin-ba36 = callPackage ./modelio-plugins/ba36.nix { };
   modelio-plugin-sa36 = callPackage ./modelio-plugins/sa36.nix { };

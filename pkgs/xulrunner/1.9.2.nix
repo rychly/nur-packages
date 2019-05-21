@@ -30,7 +30,7 @@ let
     };
 
     postPatch = ''
-      sed -i "s|^\\(moz_libdir=\\).*\$|\\1$out/lib/xulrunner|" ./xulrunner
+      sed -i "s|^\\(moz_libdir=\\).*\$|\\1$out/lib|" ./xulrunner
     '';
 
     dontConfigure = true;
@@ -38,13 +38,13 @@ let
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/lib/xulrunner
-      mv ./* $out/lib/xulrunner/
+      mkdir -p $out/lib
+      mv ./* $out/lib/
       runHook postInstall
     '';
 
     setupHook = builtins.toFile "setupHook.sh" ''
-      if [ -z "$MOZILLA_FIVE_HOME" ]; then export MOZILLA_FIVE_HOME="$1/lib/xulrunner"; fi
+      if [ -z "$MOZILLA_FIVE_HOME" ]; then export MOZILLA_FIVE_HOME="$1/lib"; fi
     '';
 
     meta = with stdenv.lib; {
@@ -56,7 +56,7 @@ let
     };
 
     passthru = {
-      home = "${xulrunner192}/lib/xulrunner";
+      home = "${xulrunner192}/lib";
     };
 
   };

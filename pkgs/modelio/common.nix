@@ -1,5 +1,6 @@
 { stdenv, requireFile, dpkg, makeWrapper, makeDesktopItem
 , glib, gtk2, libXtst	# required by libswt-pi-gtk-*.so extracted and linked by eclipse runtime
+, libXt, alsaLib	# required by libxpcom
 , jre
 # GTK+2 for org.eclipse.swt.SWTError: No more handles [Unknown Mozilla path (MOZILLA_FIVE_HOME not set)]
 # and set env variable SWT_GTK3=0 in ${MODELIO_PATH}/modelio.sh to use GTK+2 instead of GTK+3
@@ -94,7 +95,7 @@ let
       # wrappers
       makeWrapper $out/lib/modelio-by-modeliosoft${versionMajor}/modelio $out/bin/modelio \
         --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
-        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]} \
+        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst libXt alsaLib xulrunner192 ]} \
         --set JAVA_HOME ${jre.home} \
         --set MOZILLA_FIVE_HOME ${xulrunner192.home} \
         --set SWT_GTK3 0 \

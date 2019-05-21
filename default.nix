@@ -11,7 +11,7 @@
 let
 
   lib-custom = import ./lib { inherit lib; };
-  pkgs-custom = import ./pkgs { inherit pkgs; };
+  pkgs-custom = import ./pkgs { inherit pkgs lib-custom; };
 
 in {
 

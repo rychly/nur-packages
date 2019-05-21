@@ -14,7 +14,7 @@ in rec {
   # sudo nix-channel --update nixpkgs-unstable
   pkgs-unstable = let
     unstable-from-nix-channel = import <nixpkgs-unstable> { };
-    unstable-from-git = import (fetchGit "master");
+    unstable-from-git = import (fetchNixpkgsGit "master") { };
   in with builtins.tryEval unstable-from-nix-channel; if success then value else unstable-from-git;
 
   # At least given version of given pkgs, that is the given version or an unstable/master version if the given pkgs is older.
