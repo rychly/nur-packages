@@ -31,6 +31,9 @@ with pkgs; rec {
   konwert = callPackage ./konwert { };
   libjpeg-extra = callPackage ./libjpeg-extra { };
   lingea-trd-decoder = callPackage ./lingea-trd-decoder { };
+  luaspell = callPackage ./luaspell {
+    inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder;
+  };
   luasql-oci8 = callPackage ./luasql-oci8 {
     inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder;
     inherit oracle-instantclient;
