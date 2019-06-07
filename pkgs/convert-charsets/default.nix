@@ -2,7 +2,7 @@
 }:
 
 let
-  version = "2019.05.10";
+  version = "2019.06.07";
 in
 
 buildLuaPackage {
@@ -11,8 +11,8 @@ buildLuaPackage {
 
   src = fetchgit {
     url = "https://gitlab.com/rychly/convert-charsets.git";
-    rev = "2ce359e042be9bbdb2ad7c074354185f5d1267fd";
-    sha256 = "1h7fsga2zdw7yvma3iyriy8spm9hagrqgmqlhcy8as3qkxmbhw4a";
+    rev = "ef792934516c1928909e58d060e16a83";
+    sha256 = "0n0z6hdrw6w2q6a5zginsb82yhzym84b5wd78cjvyfjkl3vi4wkz";
   };
 
   disabled = ( luaOlder "5.1" );

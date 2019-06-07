@@ -41,6 +41,10 @@ with pkgs; rec {
   luaxmlrpc = callPackage ./luaxmlrpc {
     inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder luaAtLeast luaexpat luasocket;
   };
+  mail-parser = callPackage ./mail-parser {
+    inherit (pkgs.luaPackages) buildLuaPackage luaOlder wrapLua luafilesystem luasocket;
+    inherit convert-charsets;
+  };
   modelio36 = callPackage ./modelio/default36.nix {
     inherit xulrunner192;
     plugins = [];
