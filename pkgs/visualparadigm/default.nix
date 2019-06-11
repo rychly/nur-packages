@@ -24,7 +24,7 @@ let
   versionParts = builtins.split "build" version;
   versionMain = builtins.elemAt versionParts 0;
   versionBuild = builtins.elemAt versionParts 2;	# idx 2, not idx 1 which is an empty list for the separator
-  version = "15.2build20190401";
+  version = "15.2build20190501";
 in
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://eu6.visual-paradigm.com/visual-paradigm/vp${versionMain}/${versionBuild}/Visual_Paradigm_${builtins.replaceStrings [ "." ] [ "_" ] versionMain}_${versionBuild}_Linux64_InstallFree.tar.gz";
-    sha256 = "0krp3qnaqh3jx7i8l38cc1ccgc4qpjc90rz30r2b62k3ydridi59";
+    sha256 = "0xlv6cbqarj2mkcx4d121rmjwjq9m0dlihxhs51dmgnwlq1sxjxm";
   };
 
   nativeBuildInputs = [ makeWrapper ];
