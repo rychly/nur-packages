@@ -1,110 +1,273 @@
-diff -urN tools/src/wikipediaImage.cpp.orig tools/src/wikipediaImage.cpp
---- tools/src/wikipediaImage.cpp.orig	2012-09-18 15:50:40.000000000 +0200
-+++ tools/src/wikipediaImage.cpp	2012-09-18 15:51:27.000000000 +0200
-@@ -1,8 +1,6 @@
+diff -urN a/src/wikipediaImage.cpp b/src/wikipediaImage.cpp
+--- a/src/wikipediaImage.cpp	2010-10-03 14:23:47.000000000 +0200
++++ b/src/wikipediaImage.cpp	2019-06-12 23:16:04.454625020 +0200
+@@ -1,7 +1,9 @@
  #include <stdio.h>
  #include <stdlib.h>
  
--#include "mysql.h"
--
++/* DISABLED
+ #include "mysql.h"
++*/
+ 
  #define CONN_HOST "localhost"
  #define CONN_USER "wikiuser"
- #define CONN_PASS "123"
-@@ -11,6 +9,7 @@
+@@ -11,6 +13,7 @@
  
  void dump_file()
  {
-+/*
++	/* DISABLED
  	MYSQL mysql;
  	if (!mysql_init(&mysql))
  		return;
-@@ -38,13 +37,16 @@
+@@ -38,13 +41,16 @@
  	}
  	mysql_free_result(res);
  	mysql_close(&mysql);
-+*/
++	*/
  }
  
  int main(int argc,char * argv [])
  {
-+/*
++	/* DISABLED
  	if (mysql_library_init(argc, argv, NULL))
  		return 0;
  	dump_file();
  	mysql_library_end();
-+*/
++	*/
  	return 0;
  }
-
-diff -urN tools/src/tabfile2sql.cpp.orig tools/src/tabfile2sql.cpp
---- tools/src/tabfile2sql.cpp.orig	2012-09-18 15:54:11.000000000 +0200
-+++ tools/src/tabfile2sql.cpp	2012-09-18 15:55:19.000000000 +0200
-@@ -5,8 +5,6 @@
- #include <unistd.h>
+diff -urN a/src/tabfile2sql.cpp b/src/tabfile2sql.cpp
+--- a/src/tabfile2sql.cpp	2010-10-03 14:23:47.000000000 +0200
++++ b/src/tabfile2sql.cpp	2019-06-12 23:16:49.485004835 +0200
+@@ -6,7 +6,9 @@
  #include <glib.h>
+ #include <cstring>
  
--#include <mysql.h>
--
++/* DISABLED
+ #include <mysql.h>
++*/
+ 
  #include <string>
  
- void print_info(const char *info)
-@@ -80,8 +78,10 @@
+@@ -81,8 +83,10 @@
  	char word_buf[word_len*2+3];
  	int meaning_len = strlen(meaning);
  	char meaning_buf[meaning_len*2+3];
-+/*
++	/* DISABLED
  	mysql_escape_string(word_buf, word, word_len);
  	mysql_escape_string(meaning_buf, meaning, meaning_len);
-+*/
++	*/
  	fputs("INSERT INTO dict (keyword, definition) VALUES('", sqlfile);
  	fputs(word_buf, sqlfile);
  	fputs("','", sqlfile);
-
-diff -urN tools/src/Makefile.am.orig tools/src/Makefile.am
---- tools/src/Makefile.am.orig	2007-11-07 08:55:24.000000000 +0100
-+++ tools/src/Makefile.am	2012-09-18 16:33:10.000000000 +0200
-@@ -136,14 +136,14 @@
- wikipedia_LDADD = $(STARDICT_LIBS) $(LFS_LIBS)
- wikipedia_SOURCES = wikipedia.cpp
+diff -urN a/configure.ac b/configure.ac
+--- a/configure.ac	2010-10-04 20:20:26.000000000 +0200
++++ b/configure.ac	2019-06-12 23:34:12.011599109 +0200
+@@ -38,67 +37,12 @@
+ AC_HEADER_STDC
+ AC_CHECK_HEADERS([stdlib.h])
  
--wikipediaImage_CPPFLAGS = -I/usr/include/mysql
--wikipediaImage_LDFLAGS = -L/usr/lib/mysql
--wikipediaImage_LDADD = $(STARDICT_LIBS) -lmysqlclient
-+wikipediaImage_CPPFLAGS =
-+wikipediaImage_LDFLAGS =
-+wikipediaImage_LDADD = $(STARDICT_LIBS)
- wikipediaImage_SOURCES = wikipediaImage.cpp
+-# mysql.h
+-MYSQLFOUND=NO
+-AC_CHECK_HEADER([mysql.h],
+-	[
+-		MYSQL_CFLAGS=
+-		MYSQLFOUND=YES
+-	],
+-	[], []
+-)
+-if test x$MYSQLFOUND = xNO; then
+-	AC_FIND_FILE([mysql.h],
+-		[/usr/local/mysql/include /usr/include/mysql /usr/local/include/mysql],
+-		[MYSQLINCDIR])
+-	if test x$MYSQLINCDIR != xNO; then
+-		AC_CHECK_HEADER([$MYSQLINCDIR/mysql.h],
+-			[
+-				MYSQL_CFLAGS="-I${MYSQLINCDIR}"
+-				MYSQLFOUND=YES
+-			],
+-			[], []
+-		)
+-	fi
+-fi
+-if test x$MYSQLFOUND = xNO; then
+-	AC_ERROR([mysql.h header not found])
+-fi
+-AC_SUBST(MYSQL_CFLAGS)
+-
+ # Checks for typedefs, structures, and compiler characteristics.
  
--tabfile2sql_CPPFLAGS = -I/usr/include/mysql
--tabfile2sql_LDFLAGS = -L/usr/lib/mysql
--tabfile2sql_LDADD = $(STARDICT_LIBS) -lmysqlclient
-+tabfile2sql_CPPFLAGS =
-+tabfile2sql_LDFLAGS =
-+tabfile2sql_LDADD = $(STARDICT_LIBS)
- tabfile2sql_SOURCES = tabfile2sql.cpp
+ # Checks for library functions.
+ DEP_MODULES="gtk+-2.0 >= 2.6 glib-2.0 >= 2.8"
+ PKG_CHECK_MODULES(STARDICT, $DEP_MODULES)
  
- babylon_LDFLAGS =
-
-diff -urN tools/src/Makefile.in.orig tools/src/Makefile.in
---- tools/src/Makefile.in.orig	2007-11-07 08:55:32.000000000 +0100
-+++ tools/src/Makefile.in	2012-09-18 16:33:34.000000000 +0200
-@@ -687,13 +687,13 @@
- wikipedia_LDFLAGS = $(LFS_LDFLAGS)
- wikipedia_LDADD = $(STARDICT_LIBS) $(LFS_LIBS)
- wikipedia_SOURCES = wikipedia.cpp
--wikipediaImage_CPPFLAGS = -I/usr/include/mysql
--wikipediaImage_LDFLAGS = -L/usr/lib/mysql
--wikipediaImage_LDADD = $(STARDICT_LIBS) -lmysqlclient
-+wikipediaImage_CPPFLAGS =
-+wikipediaImage_LDFLAGS =
-+wikipediaImage_LDADD = $(STARDICT_LIBS)
- wikipediaImage_SOURCES = wikipediaImage.cpp
--tabfile2sql_CPPFLAGS = -I/usr/include/mysql
--tabfile2sql_LDFLAGS = -L/usr/lib/mysql
--tabfile2sql_LDADD = $(STARDICT_LIBS) -lmysqlclient
-+tabfile2sql_CPPFLAGS =
-+tabfile2sql_LDFLAGS =
-+tabfile2sql_LDADD = $(STARDICT_LIBS)
- tabfile2sql_SOURCES = tabfile2sql.cpp
- babylon_LDFLAGS = 
- babylon_LDADD = $(STARDICT_LIBS)
+-# mysqlclient
+-MYSQLFOUND=NO
+-AC_CHECK_LIB([mysqlclient], [mysql_real_connect],
+-	[
+-		MYSQL_LIBS="-lmysqlclient"
+-		MYSQL_LDFLAGS=
+-		MYSQLFOUND=YES
+-	],
+-	[]
+-)
+-if test x$MYSQLFOUND = xNO; then
+-	AC_FIND_FILE([libmysqlclient.a],
+-		[/usr/lib /usr/lib/mysql /usr/local/mysql/lib /usr/local/lib/mysql],
+-		[MYSQLLIBDIR])
+-	if test x$MYSQLLIBDIR != xNO; then
+-		MYSQL_LIBS="-lmysqlclient"
+-		MYSQL_LDFLAGS="-L${MYSQLLIBDIR}"
+-		MYSQLFOUND=YES
+-		AC_MSG_RESULT([libmysqlclient.a found at ${MYSQLLIBDIR}])
+-	fi
+-fi
+-if test x$MYSQLFOUND = xNO; then
+-	AC_ERROR([libmysqlclient.a not found])
+-fi
+-AC_SUBST(MYSQL_LIBS)
+-AC_SUBST(MYSQL_LDFLAGS)
+-
+ STARDICT_CFLAGS="-Wall $STARDICT_CFLAGS"
+ 
+ LFS_CFLAGS=`getconf LFS_CFLAGS`
+diff -urN a/configure b/configure
+--- a/configure	2011-01-11 17:06:29.000000000 +0100
++++ b/configure	2019-06-12 23:34:59.026982301 +0200
+@@ -15160,55 +15160,6 @@
+ done
+ 
+ 
+-# mysql.h
+-MYSQLFOUND=NO
+-ac_fn_c_check_header_compile "$LINENO" "mysql.h" "ac_cv_header_mysql_h" "
+-
+-"
+-if test "x$ac_cv_header_mysql_h" = x""yes; then :
+-
+-		MYSQL_CFLAGS=
+-		MYSQLFOUND=YES
+-
+-fi
+-
+-
+-if test x$MYSQLFOUND = xNO; then
+-
+-	MYSQLINCDIR=NO
+-	for x in /usr/local/mysql/include /usr/include/mysql /usr/local/include/mysql
+-	do
+-		for y in mysql.h
+-		do
+-			if test -r "$x/$y"
+-			then
+-				MYSQLINCDIR=$x
+-				break 2
+-			fi
+-		done
+-	done
+-
+-
+-	if test x$MYSQLINCDIR != xNO; then
+-		as_ac_Header=`$as_echo "ac_cv_header_$MYSQLINCDIR/mysql.h" | $as_tr_sh`
+-ac_fn_c_check_header_compile "$LINENO" "$MYSQLINCDIR/mysql.h" "$as_ac_Header" "
+-
+-"
+-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+-
+-				MYSQL_CFLAGS="-I${MYSQLINCDIR}"
+-				MYSQLFOUND=YES
+-
+-fi
+-
+-
+-	fi
+-fi
+-if test x$MYSQLFOUND = xNO; then
+-	as_fn_error $? "mysql.h header not found" "$LINENO" 5
+-fi
+-
+-
+ # Checks for typedefs, structures, and compiler characteristics.
+ 
+ # Checks for library functions.
+@@ -15422,80 +15373,6 @@
+ 
+ fi
+ 
+-# mysqlclient
+-MYSQLFOUND=NO
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mysql_real_connect in -lmysqlclient" >&5
+-$as_echo_n "checking for mysql_real_connect in -lmysqlclient... " >&6; }
+-if test "${ac_cv_lib_mysqlclient_mysql_real_connect+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lmysqlclient  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char mysql_real_connect ();
+-int
+-main ()
+-{
+-return mysql_real_connect ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_mysqlclient_mysql_real_connect=yes
+-else
+-  ac_cv_lib_mysqlclient_mysql_real_connect=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_mysqlclient_mysql_real_connect" >&5
+-$as_echo "$ac_cv_lib_mysqlclient_mysql_real_connect" >&6; }
+-if test "x$ac_cv_lib_mysqlclient_mysql_real_connect" = x""yes; then :
+-
+-		MYSQL_LIBS="-lmysqlclient"
+-		MYSQL_LDFLAGS=
+-		MYSQLFOUND=YES
+-
+-fi
+-
+-if test x$MYSQLFOUND = xNO; then
+-
+-	MYSQLLIBDIR=NO
+-	for x in /usr/lib /usr/lib/mysql /usr/local/mysql/lib /usr/local/lib/mysql
+-	do
+-		for y in libmysqlclient.a
+-		do
+-			if test -r "$x/$y"
+-			then
+-				MYSQLLIBDIR=$x
+-				break 2
+-			fi
+-		done
+-	done
+-
+-
+-	if test x$MYSQLLIBDIR != xNO; then
+-		MYSQL_LIBS="-lmysqlclient"
+-		MYSQL_LDFLAGS="-L${MYSQLLIBDIR}"
+-		MYSQLFOUND=YES
+-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: libmysqlclient.a found at ${MYSQLLIBDIR}" >&5
+-$as_echo "libmysqlclient.a found at ${MYSQLLIBDIR}" >&6; }
+-	fi
+-fi
+-if test x$MYSQLFOUND = xNO; then
+-	as_fn_error $? "libmysqlclient.a not found" "$LINENO" 5
+-fi
+-
+ 
+ 
+ STARDICT_CFLAGS="-Wall $STARDICT_CFLAGS"

@@ -3,27 +3,18 @@
 }:
 
 let
-  version = "2.1-nightly-28";
+  version = "2.1-snapshot-2018-09-05";
   name = "dex2jar-${version}";
   src = fetchFromGitHub {
     owner = "pxb1988";
     repo = "dex2jar";
-    rev = version;
-    sha256 = "04xr6j3s4mgvhihvjhx0hm3kqhyvnbyb14kvvfazm1g1i6ni65pk";
+    rev = "9cfc8ba805a98b4585bab1831b47b29969aa85e4";
+    sha256 = "1d77d041nb1m5jbw9cgdh96x53c732k7zi5pzgshh5pqzcv1z132";
   };
-  # [PATCH] update dx from 1.7 to 23.0.0
-  srcPatchDx = fetchurl {
-    url = "https://github.com/pxb1988/dex2jar/commit/c4bec2d2ec14d282667fe8241510d15ef85a3cfe.patch";
-    sha256 = "d344460ed88a29230cb47bee35f749e57a60c77732bfd402516dbfe7c157bf00";
-  };
-  # reverse the DX 1.7=>23.0.0 patch to fix issue https://github.com/pxb1988/dex2jar/issues/140
-  # we need to skip tests by "build --exclude-task test" as com.googlecode.dex2jar.ir.test.RemoveConstantFromSSATest > t004 FAILED
-  patches = [ srcPatchDx ];
-  patchFlags = [ "-p1 --reverse" ];	# each flags item applies on its corresponing patches item
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {	# cannot be a recursive derivation as we reffer to the name in the let
     name = "${name}-deps";
-    inherit src patches patchFlags;
+    inherit src;
     # disable fixupPhase as it can modify the resulting directory structure of the repository (e.g., move {man,doc,info} dirs into the share dir)
     phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" ];
     buildInputs = [ gradle perl ];
@@ -43,11 +34,11 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1qqs8kp1xc71kvrgrd5m1w80qyppypsz490zwcrfzkwnlivz8085";
+    outputHash = "1qbfh3bs8kclhmqrix71cbpkhxz2p5f3cwjpwj5lr3v7dsbsj4jd";
   };
 
 in stdenv.mkDerivation rec {
-  inherit name src patches patchFlags;
+  inherit name src;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gradle ];
