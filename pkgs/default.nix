@@ -76,6 +76,12 @@ with pkgs; rec {
   photo-mgmt = callPackage ./photo-mgmt {
     inherit flickcurl;
   };
+  pyglossary = callPackage ./pyglossary {
+    withGtk3 = true;
+  };
+  pyglossaryNoGui = callPackage ./pyglossary {
+    withGtk3 = false;
+  };
   raccoon4 = callPackage ./raccoon/4.nix { };
   rajce-download = callPackage ./rajce-download {};
   rclonefs = callPackage ./rclonefs { };
@@ -90,7 +96,9 @@ with pkgs; rec {
   soapui = callPackage ./soapui { };
   sqldeveloper = callPackage ./sqldeveloper { };
   stardict-lingea-lexicon = callPackage ./stardict-lingea-lexicon {
-    inherit stardict-tools;
+    inherit stardict-tools pyglossaryNoGui;
+    withStardictTools = false;
+    withPyGlossary = true;
   };
   stardict-tools = callPackage ./stardict-tools { };
   televize = callPackage ./televize {

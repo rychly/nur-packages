@@ -1,4 +1,6 @@
-{ stdenv, requireFile, stardict-tools, dict
+{ stdenv, requireFile, dict
+, withStardictTools ? false, stardict-tools ? null
+, withPyGlossary ? true, pyglossaryNoGui ? null
 }:
 
 let
@@ -30,8 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    dict	# provides dictzip (required by stardict_tabfile or applied after pygloccary)
+  ] ++ stdenv.lib.optionals (withStardictTools) [
     stardict-tools	# provides stardict_tabfile
-    dict	# provides dictzip required by stardict_tabfile
+  ] ++ stdenv.lib.optionals (withPyGlossary) [
+    pyglossaryNoGui
   ];
 
   buildPhase = ''
@@ -44,12 +49,21 @@ stdenv.mkDerivation rec {
       local TABFILE="$1"
       local BNFILE="$2/$(basename $TABFILE .tab).txt"
       local IFOFILE="''${TABFILE%.tab}.ifo"
+      local DICTFILE="''${TABFILE%.tab}.dict"
       # process
       if grep -q "$DECERR" "$TABFILE"; then
         echo "compile error for '$TABFILE': $DECERR" &>2
       else
         sed -i 's/\\\([^n]\)/\1/g' "$TABFILE"
-        stardict_tabfile "$TABFILE"
+        if ${if withStardictTools then "true" else "false"}; then
+          stardict_tabfile "$TABFILE"
+        elif ${if withPyGlossary then "true" else "false"}; then
+          HOME=$TMP pyglossary --no-progress-bar "$TABFILE" "$IFOFILE" --write-options="sametypesequence=g"
+          dictzip "$DICTFILE"
+        else
+          echo "No startdict-tools or pyglossaryNoGui!" >&2
+          exit 1
+        fi
         # set info
         local BOOKNAME=$(head -1 "$BNFILE" | cut -d . -f 1)
         sed -i \
