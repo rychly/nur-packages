@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     mv ./*.{pdf,txt} $out/share/doc/ipmiview
     mv ./* $out/lib/ipmiview
     makeWrapper ${jre}/bin/java $out/bin/ipmiview \
-      --add-flags "-jar $out/share/java/IPMIView20.jar"
+      --add-flags "-Djava.library.path=$out/lib/ipmiview -jar $out/share/java/IPMIView20.jar"
     makeWrapper ${jre}/bin/java $out/bin/jviewerx9 \
-      --add-flags "-jar $out/share/java/JViewerX9.jar"
+      --add-flags "-Djava.library.path=$out/lib/ipmiview -jar $out/share/java/JViewerX9.jar"
     makeWrapper ${jre}/bin/java $out/bin/trapreceiver \
-      --add-flags "-jar $out/share/java/TrapView.jar"
+      --add-flags "-Djava.library.path=$out/lib/ipmiview -jar $out/share/java/TrapView.jar"
     makeWrapper ${jre}/bin/java $out/bin/ikvm \
       --add-flags "-Djava.library.path=$out/lib/ipmiview -jar $out/share/java/iKVM.jar"
     makeWrapper ${jre}/bin/java $out/bin/ikvm-microblade \
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    patchelf --set-rpath "${gcc-unwrapped.lib}/lib" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/ipmiview/BMCSecurity/linux/stunnel32
+    patchelf --set-rpath "${gcc-unwrapped.lib}/lib" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/ipmiview/BMCSecurity/linux/stunnel64
     patchelf --set-rpath "${gcc-unwrapped.lib}/lib" $out/lib/ipmiview/libiKVM32.so
     patchelf --set-rpath "${gcc-unwrapped.lib}/lib" $out/lib/ipmiview/libiKVM64.so
   '';
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "SuperMicro IPMI management tool";
     homepage = ftp://ftp.supermicro.com/utility/IPMIView/Linux/;
     license = licenses.unfree;
-    #maintainers = [ maintainers.rychly ];  # TODO: register as the package maintainer
+    #maintainers = [ maintainers.rychly ];	# TODO: register as the package maintainer
     platforms = platforms.unix;
   };
 }
