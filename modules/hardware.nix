@@ -23,9 +23,9 @@ let
     };
 
     chipsetVendors = mkOption {
-      type = types.listOf (types.enum [ "intel-cpu" "amd-cpu" "intel-gpu" "amd-gpu" "nvidia-gpu" ]);
+      type = types.listOf (types.enum [ "intel-cpu" "amd-cpu" "intel-gpu" "amd-gpu" "ati-gpu" "nvidia-gpu" ]);
       default = [ ];
-      description = "List of supported chipset vendors: Intel and AMD for CPUs and GPUs, NVidia for GPUs, etc.";
+      description = "List of supported chipset vendors: Intel and AMD for CPUs and GPUs; ATI and NVidia for GPUs; etc.";
     };
 
     nvidiaGpuDriver = mkOption {
@@ -132,6 +132,9 @@ in {
       ]
       else if (vendor == "amd-gpu") then [
         "ati_unfree"	# AMD/ATI proprietary video driver
+      ]
+      else if (vendor == "ati-gpu") then [
+        "ati"	# AMD/ATI free video driver
       ]
       else if (vendor == "nvidia-gpu") then [
         cfg.nvidiaGpuDriver	# NVIDIA proprietary video driver of particular type (current or legacy)
