@@ -15,6 +15,12 @@ let
 
     options = {
 
+      name = mkOption {
+        type = types.str;
+        description = "The username of the user (the same as in <code>config.users.users.<name>.name</code>."
+          + " It must be defined also here to prevent infinite recursion by accessing <code>config.users.users</code>.";
+      };
+
       addToUsersUsers = mkOption {
         type = types.bool;
         default = true;
@@ -135,7 +141,7 @@ in {
     ## users
 
     users.users = builtins.listToAttrs (map (user: {
-      inherit (user.nixOsUser) name;
+      inherit (user) name;
       value = user.nixOsUser // {
         description = concatStringsSep "," ( [ ]
           ++ optional (user.fullName != null) (sanitizePasswdItem user.fullName)
@@ -175,7 +181,7 @@ in {
 
     # home-manager home.files and other configuration for individual users
     home-manager.users = builtins.listToAttrs (map (user: {
-      inherit (user.nixOsUser) name;
+      inherit (user) name;	# cannot access user.nixOsUser as (e.g., for "root") it results into infinite recursion because home-manager is trying to set users.users.<name>.packages (and maybe also for another reasons)
       value = recursiveUpdateUntil (path: l: r: path == [ "home" "file" ]) {
         home.file =
           # global home files for all users individually
@@ -194,8 +200,8 @@ in {
         message = "Automatically logged in for a main user is enabled and the main user is not set.";
       }
       {
-        assertion = builtins.all (user: (builtins.hasAttr "name" user.nixOsUser) && (builtins.hasAttr "home" user.nixOsUser)) cfg.users;
-        message = "All users must have defined 'nixOsUser.name' and 'nixOsUser.home' attributes.";
+        assertion = builtins.all (user: (builtins.hasAttr "name" user.nixOsUser) && (user.name == user.nixOsUser.name) && (builtins.hasAttr "home" user.nixOsUser)) cfg.users;
+        message = "All users must have defined 'nixOsUser.name' (its value must be the same as a value of 'name' attribute of the user) and 'nixOsUser.home' attributes.";
       }
     ];
 
