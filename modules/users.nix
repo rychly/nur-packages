@@ -53,7 +53,8 @@ let
       homeFilesDirs = mkOption {
         type = types.listOf (types.either types.path types.str);
         default = [ ];
-        description = "List of directories (by paths or strings; paths are stored in a public nix-store, strings are not stored and can be in a secure path)."
+        description = "List of directories (by paths or strings; paths are stored in a public nix-store, strings are not stored and can be in a secure path ("
+          + " (except for newer versions of home-manager, see https://github.com/rycee/home-manager/pull/541, use https://gitlab.com/rychly/home-manager/commit/6017a96afee8ba3d1fd6258b504c0d344d89beff)."
           + " The content of the directories will be symlinked to the home directory of the user by <code>home-manager.users.*.home.file</code>.";
       };
 
