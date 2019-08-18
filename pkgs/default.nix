@@ -92,6 +92,7 @@ with pkgs; rec {
   rofi-modi-vbox = callPackage ./rofi-modi-vbox {
     inherit dunstify-stdout;
   };
+  sandbox = callPackage ./sandbox { };
   setlayout = callPackage ./setlayout { };
   soapui = callPackage ./soapui { };
   sqldeveloper = callPackage ./sqldeveloper { };
