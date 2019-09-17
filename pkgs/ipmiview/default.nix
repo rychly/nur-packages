@@ -5,7 +5,7 @@
 let
   sha256 = {
     "i686-linux" = "0d2qmw3hggq7fdkly557gcivfvk6l39brq208yhd171b8rcr9f6y";
-    "x86_64-linux" = "0pz4q8vsnv6wqpiy6am333c2cgsdjmxc6w9vm4hi8qyaavfbq0w2";
+    "x86_64-linux" = "0qw9zfnj0cyvab7ndamlw2y0gpczjhh1jkz8340kl42r2xmhkvpl";
   }.${stdenv.system};
   plat = {
     "i686-linux" = "Linux";
@@ -14,7 +14,7 @@ let
   versionParts = builtins.split "build" version;
   versionMain = builtins.elemAt versionParts 0;
   versionBuild = builtins.elemAt versionParts 2;	# idx 2, not idx 1 which is an empty list for the separator
-  version = "2.16.0build190528";
+  version = "2.16.0build190815";
 in
 
 stdenv.mkDerivation rec {
