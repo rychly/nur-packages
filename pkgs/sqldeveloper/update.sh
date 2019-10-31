@@ -4,7 +4,7 @@ NIX_FILE="${0%/*}/default.nix"
 URL_BASE="https://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html"
 
 echo "Checking updates ..."
-FILES=$(curl -s "${URL_BASE}" | grep -m 1 -o "[^'\" ]*/sqldeveloper-[0-9.]*-no-jre.zip")
+FILES=$(curl -Ls "${URL_BASE}" | grep -m 1 -o "[^'\" ]*/sqldeveloper-[0-9.]*-no-jre.zip")
 [[ $? -ne 0 ]] && exit 1
 
 VERSION=$(echo ${FILES##*/} | cut -d - -f 2)
@@ -19,7 +19,7 @@ for I in ${FILES}; do
 	FILE="/tmp/${I##*/}"
 	echo "Opening ${URL_BASE} ..."
 	echo "* accept the OTN License Agreement"
-	echo "* download ${I} with login into OTN"
+	echo "* download https:${I} with login into OTN"
 	echo "* save the downloaded file as ${FILE}"
 	echo "* press Enter to continue..."
 	read

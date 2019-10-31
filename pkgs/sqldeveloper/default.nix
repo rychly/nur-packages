@@ -1,8 +1,8 @@
 { stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
 let
-  version = "19.1.0.094.2042";
-  sha256 = "048jlrs7q3z5skh98irh1sp8vj8hfhfzbyrgq0484mcs9frjs2nh";
+  version = "19.2.1.247.2212";
+  sha256 = "0ckz2d3g36yyr8j1qlm5891sydr1vra1v4190iakb0z38nj17j33";
 
   desktopItem = makeDesktopItem {
     name = "sqldeveloper";

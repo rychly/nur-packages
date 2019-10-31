@@ -4,7 +4,7 @@ NIX_FILE="${0%/*}/default.nix"
 URL_BASE="https://www.oracle.com/technetwork/database/database-technologies/instant-client/downloads/index.html"
 
 echo "Checking updates for x86-32 ..."
-URL_BASE_X86="https://www.oracle.com"$(curl -s "${URL_BASE}" | grep -m 1 -o "[^'\" ]*/linuxsoft[^'\" ]*")
+URL_BASE_X86="https://www.oracle.com"$(curl -Ls "${URL_BASE}" | grep -m 1 -o "[^'\" ]*/linux-x86-32-[^'\" ]*")
 PAGE_X86="$(curl -s "${URL_BASE_X86}")"
 FILES_X86="$(echo "${PAGE_X86}" | grep -o "[^'\" ]*/instantclient-basic-linux-[^'\" ]*.zip" | sort -r | head -1)
 $(echo "${PAGE_X86}" | grep -o "[^'\" ]*/instantclient-sdk-linux-[^'\" ]*.zip" | sort -r | head -1)
@@ -15,7 +15,7 @@ $(echo "${PAGE_X86}" | grep -o "[^'\" ]*/instantclient-odbc-linux-[^'\" ]*.zip" 
 VERSION_X86=$(FILE=${FILES_X86##*/}; echo ${FILE%.zip} | head -1 | cut -d - -f 4)
 
 echo "Checking updates for x86-64 ..."
-URL_BASE_X64="https://www.oracle.com"$(curl -s "${URL_BASE}" | grep -m 1 -o "[^'\" ]*/linuxx86-64soft[^'\" ]*")
+URL_BASE_X64="https://www.oracle.com"$(curl -Ls "${URL_BASE}" | grep -m 1 -o "[^'\" ]*/linux-x86-64[^'\" ]*")
 PAGE_X64="$(curl -s "${URL_BASE_X64}")"
 FILES_X64="$(echo "${PAGE_X64}" | grep -o "[^'\" ]*/instantclient-basic-linux.x64-[^'\" ]*.zip" | sort -r | head -1)
 $(echo "${PAGE_X64}" | grep -o "[^'\" ]*/instantclient-sdk-linux.x64-[^'\" ]*.zip" | sort -r | head -1)
