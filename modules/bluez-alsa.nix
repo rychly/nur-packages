@@ -65,7 +65,7 @@ in {
       pcm_type.bluealsa {
         libs.native = ${cfg.package}/lib/alsa-lib/libasound_module_pcm_bluealsa.so ;
       }
-      <${cfg.package}/share/alsa/alsa.conf.d/20-bluealsa.conf>
+      <${cfg.package}/etc/alsa/conf.d/20-bluealsa.conf>
     '';
 
   };

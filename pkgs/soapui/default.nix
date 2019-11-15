@@ -1,5 +1,5 @@
 # adopted from https://github.com/NixOS/nixpkgs/pull/42078
-{ fetchurl, stdenv, writeText, jdk, maven, makeWrapper }:
+{ fetchurl, stdenv, writeText, jre, maven, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "soapui-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk maven ];
+  buildInputs = [ maven ];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
        JAVA_OPTS="-Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=$SOAPUI_HOME/bin -splash:SoapUI-Spashscreen.png"
       -JFXRTPATH=`java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
-      +JFXRTPATH=`${jdk}/bin/java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
+      +JFXRTPATH=`${jre}/bin/java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
        SOAPUI_CLASSPATH=$JFXRTPATH:$SOAPUI_CLASSPATH
 
        if $darwin
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
        echo ================================
 
       -java $JAVA_OPTS -cp $SOAPUI_CLASSPATH com.eviware.soapui.SoapUI "$@"
-      +${jdk}/bin/java $JAVA_OPTS -cp $SOAPUI_CLASSPATH com.eviware.soapui.SoapUI "$@"
+      +${jre}/bin/java $JAVA_OPTS -cp $SOAPUI_CLASSPATH com.eviware.soapui.SoapUI "$@"
     '')
   ];
 

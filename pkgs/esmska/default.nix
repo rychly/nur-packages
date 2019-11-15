@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, ant, makeWrapper, makeDesktopItem
+{ stdenv, fetchFromGitHub, ant, jdk, makeWrapper, makeDesktopItem
 , jre
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk ant ];
+  buildInputs = [ ant jdk ];
 
   dontConfigure = true;
 

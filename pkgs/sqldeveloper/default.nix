@@ -1,4 +1,4 @@
-{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
+{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jre }:
 
 let
   version = "19.2.1.247.2212";
@@ -62,7 +62,7 @@ in
     cp ${desktopItem}/share/applications/* $out/share/applications
 
     makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
-      --set JAVA_HOME ${jdk.home} \
+      --set JAVA_HOME ${jre.home} \
       --run "cd $out/libexec/sqldeveloper/bin"
   '';
 

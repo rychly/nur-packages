@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
-, jre, which
+, jre	# not compatible with pkgs.jre/openjdk-8u222-ga (cannot initialize models on startup); works with oraclejdk8
+, which
 }:
 
 let
