@@ -95,7 +95,8 @@ in rec {
   pan-baidu-download = callPackage ./pan-baidu-download { };
   pass-git-helper = callPackage ./pass-git-helper { };
   pass-menu = callPackage ./pass-menu { };
-  photo-mgmt = callPackage ./photo-mgmt {
+  photo-sort = callPackage ./photo-sort { };
+  photo-upload-flickr = callPackage ./photo-upload-flickr {
     inherit flickcurl;
   };
   pyglossary = callPackage ./pyglossary {
@@ -132,6 +133,9 @@ in rec {
   stardict-tools = callPackage ./stardict-tools { };
   televize = callPackage ./televize {
     inherit ctstream;
+  };
+  textosaurus = callPackage ./textosaurus {
+    inherit (qt5) qmake qtbase qtsvg qttools;
   };
   visualparadigm = callPackage ./visualparadigm {
     inherit jre;

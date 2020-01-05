@@ -16,7 +16,7 @@ echo "Images:"
 ls -- ${MASK}
 
 echo "Rename to sort by Exif date and time..."
-@exiv2@ -v rename -t -F -r '_%Y%m%d%H%M%S' ${MASK}
+@exiv2@ -v -t -F -r '_%Y%m%d%H%M%S' rename ${MASK}
 
 echo -n "Number of files: "
 COUNT=$(ls --color=never -- ${MASK} | wc -l)
@@ -49,7 +49,7 @@ C=1; for I in ${MASK}; do
 done
 
 echo "Rename to sequence with date..."
-@exiv2@ -v rename -r ${PATTERN} ${MASK}
+@exiv2@ -v -r ${PATTERN} rename ${MASK}
 
 if [[ "${1}" == "--dirs" ]]; then
 	echo "Moving to year-month directories..."
