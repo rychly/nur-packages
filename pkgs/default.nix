@@ -64,6 +64,9 @@ in rec {
     inherit (pkgs.luaPackages) buildLuaPackage luaOlder wrapLua luafilesystem luasocket;
     inherit convert-charsets;
   };
+  mkdocs-material = callPackage ./mkdocs-material {
+    inherit pymdown-extensions;
+  };
   modelio36 = callPackage ./modelio/default36.nix {
     inherit jre;
     inherit xulrunner192;
@@ -95,6 +98,7 @@ in rec {
   pan-baidu-download = callPackage ./pan-baidu-download { };
   pass-git-helper = callPackage ./pass-git-helper { };
   pass-menu = callPackage ./pass-menu { };
+  pep562 = callPackage ./pep562 { };
   photo-sort = callPackage ./photo-sort { };
   photo-upload-flickr = callPackage ./photo-upload-flickr {
     inherit flickcurl;
@@ -104,6 +108,9 @@ in rec {
   };
   pyglossaryNoGui = callPackage ./pyglossary {
     withGtk3 = false;
+  };
+  pymdown-extensions = callPackage ./pymdown-extensions {
+    inherit pep562;
   };
   raccoon4 = callPackage ./raccoon/4.nix {
     inherit jre;
