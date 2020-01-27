@@ -51,6 +51,12 @@
     libreoffice-still = libreoffice-langs super.libreoffice-still [ "en-US" "cs" ];
   };
 
+  mkdocsWithMyPlugins = self: super: {
+    mkdocs-with-plugins = pkgs-custom.mkdocs-with-plugins.override {
+      plugins = (ps: with ps; [ pkgs-custom.mkdocs-material ]);
+    };
+  };
+
   modelioWithAllPlugins = self: super: {
     # Modelio plugins
     modelio36 = pkgs-custom.modelio36.override {

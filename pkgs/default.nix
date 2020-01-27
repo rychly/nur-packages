@@ -67,6 +67,9 @@ in rec {
   mkdocs-material = callPackage ./mkdocs-material {
     inherit pymdown-extensions;
   };
+  mkdocs-with-plugins = callPackage ./mkdocs-with-plugins {
+    plugins = [];
+  };
   modelio36 = callPackage ./modelio/default36.nix {
     inherit jre;
     inherit xulrunner192;

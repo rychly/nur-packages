@@ -21,7 +21,8 @@ pythonPackages.buildPythonPackage {
     sha256 = "15qhhc4f6p90x1asqdsgdjfzilb66h95kxgd8scpfgvq2c4h0hjg";
   };
 
-  nativeBuildInputs = with pythonPackages; [ mkdocs pygments pymdown-extensions ];
+  nativeBuildInputs = [ mkdocs ];
+  propagatedBuildInputs = with pythonPackages; [ pygments pymdown-extensions ];
 
   meta = with stdenv.lib; {
     description = "A Material Design theme for MkDocs.";
