@@ -48,6 +48,9 @@ in rec {
   };
   jad = callPackage_i686 ./jad { };
   konwert = callPackage ./konwert { };
+  ldbus = callPackage ./ldbus {
+    inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder luaAtLeast;
+  };
   libjpeg-extra = callPackage ./libjpeg-extra { };
   lingea-trd-decoder = callPackage ./lingea-trd-decoder { };
   luaspell = callPackage ./luaspell {
