@@ -14,7 +14,7 @@ assert withLibnotify -> libnotify != null
   && !(withQt5 || withQt4);	# notifications in dhcpcd-qt require `kde4-config` and `libkdeui.so` to link with `-lkdeui` which is not available in nixpkgs (no KDE4)
 
 let
-  version = "2018.04.09";
+  version = "2019.12.11";
 in
 
 stdenv.mkDerivation rec {
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rsmarples";
     repo = "dhcpcd-ui";
-    rev = "b9967f34407a394dbe5c2edb708e58e1bf7ae62a";
-    sha256 = "0mncdsg64cgww7230dvjrrim1nf5wygr8lkgq4yv256ccvbcmg9v";
+    rev = "0b8924c666f3dddb18cd7028e55573bb";
+    sha256 = "0kkplp8xfchxcvnir9a575ygay3l3b28cihlfphwa0n6szc74fhd";
   };
 
   nativeBuildInputs = [ pkgconfig

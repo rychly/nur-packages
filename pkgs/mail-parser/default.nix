@@ -1,4 +1,4 @@
-{ stdenv, buildLuaPackage, luaOlder, fetchgit, wrapLua
+{ stdenv, buildLuaPackage, luaOlder, fetchFromGitLab, wrapLua
 , luafilesystem, luasocket, convert-charsets
 }:
 
@@ -10,8 +10,9 @@ buildLuaPackage {
 
   name = "mail-parser-${version}";
 
-  src = fetchgit {
-    url = "https://gitlab.com/rychly/mail-parser.git";
+  src = fetchFromGitLab {
+    owner = "rychly";
+    repo = "mail-parser";
     rev = "0b4a2c4a7a889a6e8048480ecaee630b";
     sha256 = "02y0r3hd9q341rs1a3lvmfxl8di3r7fwl2gpsv9i5xs5vw9qln1j";
   };
@@ -26,7 +27,7 @@ buildLuaPackage {
 
   meta = with stdenv.lib; {
     description = "Lua scripts to parse mail including its MIME structures.";
-    homepage = https://gitlab.com/rychly/mail-parser;
+    inherit (src.meta) homepage;
     license = licenses.gpl3;
     #maintainers = [ maintainers.rychly ];	# TODO: register as the package maintainer
     platforms = platforms.linux;

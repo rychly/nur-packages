@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "0.9";
+  version = "2017.09.18";
 in
 
 pythonPackages.buildPythonApplication rec {
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "PetrDlouhy";
     repo = "lingea-trd-decoder";
-    rev = "80d5acb695b8c8ef109b49db59af6659d70bfc25";
+    rev = "80d5acb695b8c8ef109b49db59af6659";
     sha256 = "0z1psb6fylls88c1nh9vlyszkm3knfr8kh28xjklbm4501b6vdcm";
   };
 

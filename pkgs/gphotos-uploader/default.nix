@@ -1,17 +1,18 @@
-{ stdenv, fetchgit, gradle, perl, makeWrapper
+{ stdenv, fetchFromGitLab, gradle, perl, makeWrapper
 , git
 , jre
 }:
 
 let
-  version = "2019.05.07";
+  version = "2019.07.20";
   plainName = "gphotos-uploader";
   className = "io.gitlab.rychly.gphotos_uploader.GPhotosUploader";
   name = "${plainName}-${version}";
-  src = fetchgit {
-    url = "https://gitlab.com/rychly/gphotos-uploader.git";
-    rev = "9f27e7935f925d765e7dbe24358905cbf353092e";
-    sha256 = "1i7h9ksgngfxc0bkaskcl321ywb843jc7b6zn6f8y1rx07il1cx5";
+  src = fetchFromGitLab {
+    owner = "rychly";
+    repo = "gphotos-uploader";
+    rev = "04939dc4511a004fa95b75834f13f7dd";
+    sha256 = "0dppy1v0xa7x2adlab7h39dmphwyca1y4ljia3gfj3giz9vpf1xl";
   };
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {	# cannot be a recursive derivation as we reffer to the name in the let
@@ -72,8 +73,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gitlab.com/rychly/gphotos-uploader/;
     description = "Uploads missing media files from given directories into Google Photos and control their sharing";
+    inherit (src.meta) homepage;
     license = licenses.asl20;
     #maintainers = [ maintainers.rychly ];	# TODO: register as the package maintainer
     platforms = platforms.unix;

@@ -4,7 +4,7 @@
 
 let
   inherit (python2Packages) python;
-  version = "2017.01.08";
+  version = "2018.10.30";
 in
 
 python2Packages.buildPythonApplication rec {
@@ -14,8 +14,8 @@ python2Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sdvcrx";
     repo = "pan-baidu-download";
-    rev = "462c515e7dc987aa877dd8e38ccd1e3e6abeab3d";
-    sha256 = "0akilq15bqrqmglx7nniswwg18yavmbzp6xh6bp0n0kf8kd8ibgy";
+    rev = "5bd559b2178be63995a5cfc5066a5df4";
+    sha256 = "13nbbkn3k22ljggkhz5m8dh6gn8lq55icwvbx9wpayfdm984jxxc";
   };
 
   nativeBuildInputs = [ makeWrapper ];

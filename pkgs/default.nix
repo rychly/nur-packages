@@ -37,6 +37,7 @@ in rec {
   };
   flickcurl = callPackage ./flickcurl { };
   getaddrinfo-tcp = callPackage ./getaddrinfo-tcp { };
+  gio-mounter = callPackage ./gio-mounter { };
   gphotos-uploader = callPackage ./gphotos-uploader {
     inherit jre;
   };

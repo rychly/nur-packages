@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "adbfs-rootless-${version}";
-  version = "2018-07-20";
+  version = "2019.07.13";
 
   src = fetchFromGitHub {
     owner = "spion";
     repo = "adbfs-rootless";
-    rev = "a8e1c7f4b561e1d77948e5d1d1ad58855bade183";
-    sha256 = "1jhljf2sdd0qwvrd67ppbwxplj59v43nwqqr4rmclqd0r3qv3d3k";
+    rev = "ba64c22dbd373499eea9c9a9d2a9dd1c";
+    sha256 = "1ax4lqprdr5v4rlznkk5q6kn80shw3rfg3jjiwv0milwxv3rl4cb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
