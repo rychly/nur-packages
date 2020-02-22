@@ -17,6 +17,9 @@ in rec {
   };
   bluez-alsa = callPackage ./bluez-alsa { };
   bluez-alsa-tools = callPackage ./bluez-alsa-tools { };
+  classic = callPackage ./classic {
+    inherit (pkgs.luaPackages) buildLuarocksPackage;
+  };
   convert-charsets = callPackage ./convert-charsets {
     inherit (pkgs.luaPackages) buildLuaPackage luaOlder wrapLua;
   };
@@ -40,6 +43,9 @@ in rec {
   gio-mounter = callPackage ./gio-mounter { };
   gphotos-uploader = callPackage ./gphotos-uploader {
     inherit jre;
+  };
+  gumbo = callPackage ./gumbo {
+    inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder;
   };
   h2status = callPackage ./h2status { };
   hunspellDictCs = callPackage ./hunspell-dicts/ooa-cs.nix { };
@@ -101,6 +107,9 @@ in rec {
   modelio-plugin-ba38 = callPackage ./modelio-plugins/ba38.nix { };
   modelio-plugin-sa38 = callPackage ./modelio-plugins/sa38.nix { };
   modelio-plugin-sd38 = callPackage ./modelio-plugins/sd38.nix { };
+  moses = callPackage ./moses {
+    inherit (pkgs.luaPackages) buildLuarocksPackage luaOlder luaAtLeast;
+  };
   oracle-instantclient = callPackage ./oracle-instantclient { };
   pan-baidu-download = callPackage ./pan-baidu-download { };
   pass-git-helper = callPackage ./pass-git-helper { };
