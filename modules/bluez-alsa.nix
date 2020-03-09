@@ -6,8 +6,6 @@ let
 
   cfg = config.rychly.bluealsa;
 
-  pkgs-custom = import ../pkgs { inherit pkgs; };
-
   # FIXME: non-root user would not have access to DBus org.bluez
   # so we would need to add https://aur.archlinux.org/cgit/aur.git/tree/bluealsa.install?h=bluez-alsa-git
   # into /etc/dbus-1 which is already managed by config.services.dbus.packages and we have no package to do this
@@ -26,7 +24,7 @@ let
 
     package = mkOption {
       type = types.package;
-      default = pkgs-custom.bluez-alsa;
+      default = bluez-alsa;	# from rychly/nixpkgs-public
       description = "The bluez-alsa package which should be utilized, see https://github.com/Arkq/bluez-alsa.";
     };
 
@@ -38,7 +36,9 @@ in {
 
   config = mkIf (cfg.enable) {
 
-    environment.systemPackages = [ pkgs-custom.bluez-alsa-tools ];
+    environment.systemPackages = [
+      bluez-alsa-tools	# from rychly/nixpkgs-public
+    ];
 
     # adapted from https://aur.archlinux.org/cgit/aur.git/tree/bluealsa.service?h=bluez-alsa-git
     systemd.services.bluealsa = {

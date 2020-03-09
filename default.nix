@@ -11,7 +11,6 @@
 let
 
   lib-custom = import ./lib { inherit lib; };
-  pkgs-custom = import ./pkgs { inherit pkgs lib-custom; };
 
 in {
 
@@ -24,6 +23,6 @@ in {
   modules = import ./modules { };
 
   # nixpkgs overlays
-  overlays = import ./overlays { inherit pkgs lib-custom pkgs-custom; };
+  overlays = import ./overlays { inherit pkgs lib-custom; };
 
-} // pkgs-custom
+}

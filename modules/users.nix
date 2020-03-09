@@ -6,7 +6,6 @@ let
 
   cfg = config.rychly.users;
 
-  pkgs-custom = import ../pkgs { inherit pkgs; };
   lib-custom = import ../lib { inherit lib; };
 
   ## modules

@@ -35,26 +35,6 @@ You can also add and use NUR as [described in the docs](https://github.com/nix-c
 
 After the importing NUR as described above, the NUR is available in modules via `config.nur` and `config.nurLocal` options.
 
-### Packages
-
-The packages available in this NUR repository can be installed like this:
-
-``` nix
-{ config, ... }:
-
-let
-
-  pkgs-custom = config.nurLocal.repos.rychly;
-
-in {
-
-  systemPackages = [
-    pkgs-custom.<package-name>
-  ];
-
-}
-```
-
 ### Overlays
 
 There are several overlays available that can be imported with an expression like this:

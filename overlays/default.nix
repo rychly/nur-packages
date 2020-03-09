@@ -1,6 +1,5 @@
 { pkgs ? import <nixpkgs> { }
 , lib-custom ? import ../lib { }
-, pkgs-custom ? import ../pkgs { inherit pkgs; }
 }:
 
 {
@@ -52,32 +51,32 @@
   };
 
   mkdocsWithMyPlugins = self: super: {
-    mkdocs-with-plugins = pkgs-custom.mkdocs-with-plugins.override {
-      plugins = (ps: with ps; [ pkgs-custom.mkdocs-material ]);
+    mkdocs-with-plugins = super.mkdocs-with-plugins.override {
+      plugins = (ps: with ps; [ super.mkdocs-material ]);
     };
   };
 
   modelioWithAllPlugins = self: super: {
     # Modelio plugins
-    modelio36 = pkgs-custom.modelio36.override {
+    modelio36 = super.modelio36.override {
       plugins = [
-        pkgs-custom.modelio-plugin-ba36
-        pkgs-custom.modelio-plugin-sa36
-        pkgs-custom.modelio-plugin-sd36
+        super.modelio-plugin-ba36
+        super.modelio-plugin-sa36
+        super.modelio-plugin-sd36
       ];
     };
-    modelio37 = pkgs-custom.modelio37.override {
+    modelio37 = super.modelio37.override {
       plugins = [
-        pkgs-custom.modelio-plugin-ba37
-        pkgs-custom.modelio-plugin-sa37
-        pkgs-custom.modelio-plugin-sd37
+        super.modelio-plugin-ba37
+        super.modelio-plugin-sa37
+        super.modelio-plugin-sd37
       ];
     };
-    modelio38 = pkgs-custom.modelio38.override {
+    modelio38 = super.modelio38.override {
       plugins = [
-        pkgs-custom.modelio-plugin-ba38
-        pkgs-custom.modelio-plugin-sa38
-        pkgs-custom.modelio-plugin-sd38
+        super.modelio-plugin-ba38
+        super.modelio-plugin-sa38
+        super.modelio-plugin-sd38
       ];
     };
   };
@@ -123,8 +122,8 @@
   };
 
   versionUpdates = self: super: {
-    # FIXME: automatically check if the pkgs-custom versions are newer than pkgs versions
-    adbfs-rootless = pkgs-custom.adbfs-rootless;
+    # FIXME: automatically check if the super versions are newer than pkgs versions
+    adbfs-rootless = super.adbfs-rootless;
   };
 
   freshRelease = self: super: {
