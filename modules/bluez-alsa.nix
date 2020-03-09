@@ -24,7 +24,7 @@ let
 
     package = mkOption {
       type = types.package;
-      default = bluez-alsa;	# from rychly/nixpkgs-public
+      default = pkgs.bluez-alsa;	# from rychly/nixpkgs-public
       description = "The bluez-alsa package which should be utilized, see https://github.com/Arkq/bluez-alsa.";
     };
 
@@ -37,7 +37,7 @@ in {
   config = mkIf (cfg.enable) {
 
     environment.systemPackages = [
-      bluez-alsa-tools	# from rychly/nixpkgs-public
+      pkgs.bluez-alsa-tools	# from rychly/nixpkgs-public
     ];
 
     # adapted from https://aur.archlinux.org/cgit/aur.git/tree/bluealsa.service?h=bluez-alsa-git
