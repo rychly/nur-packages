@@ -87,7 +87,7 @@ in {
     in mkIf (cfg.setHostNameAndDomain && (domain != null)) domain;
 
     # system administrator email
-    networking.defaultMailServer.root = mkIf (cfg.sysAdminEmail != null) cfg.sysAdminEmail;
+    services.ssmtp.root = mkIf (cfg.sysAdminEmail != null) cfg.sysAdminEmail;
 
     # numlock
     services.xserver.displayManager.sessionCommands = mkIf (cfg.numLockOn != null) (mkAfter ''

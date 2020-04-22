@@ -173,10 +173,6 @@ in {
         enable = true;
         user = cfg.mainUser.name;
       };
-      slim.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
-        enable = true;
-        defaultUser = cfg.mainUser.name;
-      };
     };
 
     # home-manager home.files and other configuration for individual users

@@ -23,7 +23,7 @@ let
     };
 
     displayManager = mkOption {
-      type = types.nullOr (types.enum [ "auto" "gdm" "lightdm" "sddm" "slim" "xpra"]);
+      type = types.nullOr (types.enum [ "auto" "gdm" "lightdm" "sddm" "xpra"]);
       default = null;
       description = "Display manager to enable.";
     };
@@ -102,37 +102,23 @@ in {
       };
 
       # display manager (GDM runs in Wayland by default services.xserver.displayManager.gdm.wayland and knows both X and Sway)
-      displayManager = mkIf (cfg.displayManager != null) {
-        ${cfg.displayManager}.enable = true;
-        session = [
-          {
-            manage = "desktop";
-            name = "urxvt";
-            start = ''
-              ${pkgs.rxvt_unicode-with-plugins}/bin/urxvt -ls &
-              waitPID=$!
-            '';
-          }
-        ];
-      };
 
-      # window manager
-      windowManager = mkIf (cfg.windowManager != null) {
-        default = cfg.windowManager;
-        i3 = {
-          enable = cfg.windowManager == "i3";
-          extraPackages = with pkgs; [
-            rofi	# instead of default dmenu
-            h2status	# from rychly/nixpkgs-public
-            i3lock
-          ];
-          # no configFile, as the configuration is in home-manager.users.*.services.xsession.windowManager.i3
-        };
-      };
+      displayManager.session = [
+        {
+          manage = "desktop";
+          name = "urxvt";
+          start = ''
+            ${pkgs.rxvt_unicode-with-plugins}/bin/urxvt -ls &
+            waitPID=$!
+          '';
+        }
+      ];
 
-      # desktop manager
-      desktopManager = mkIf (cfg.desktopManager != null) {
-        default = cfg.desktopManager;
+      displayManager.${cfg.displayManager}.enable = (cfg.displayManager != null);
+
+      # desktop and window manager
+
+      desktopManager = {
         gnome3.enable = cfg.desktopManager == "gnome3";
         lxqt.enable = cfg.desktopManager == "lxqt";
         mate.enable = cfg.desktopManager == "mate";
@@ -141,6 +127,21 @@ in {
         # disable xterm, we have urxvt for window-managed environments above
         xterm.enable = false;
       };
+
+      windowManager.i3 = {
+        enable = cfg.windowManager == "i3";
+        extraPackages = with pkgs; [
+          rofi	# instead of default dmenu
+          h2status	# from rychly/nixpkgs-public
+          i3lock
+        ];
+        # no configFile, as the configuration is in home-manager.users.*.services.xsession.windowManager.i3
+      };
+
+      displayManager.defaultSession =
+        (if (cfg.desktopManager != null) then cfg.desktopManager else "none")
+        + "+"
+        + (if (cfg.windowManager != null) then cfg.windowManager else "none");
 
     };
 
