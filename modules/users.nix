@@ -157,10 +157,6 @@ in {
     # auto-login
     services.mingetty.autologinUser = mkIf (cfg.mainUser.autoLoginMingetty) cfg.mainUser.name;
     services.xserver.displayManager = {
-      auto = mkIf (cfg.mainUser.autoLoginXserver) {
-        enable = mkDefault true;
-        user = cfg.mainUser.name;
-      };
       gdm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
         enable = true;
         user = cfg.mainUser.name;

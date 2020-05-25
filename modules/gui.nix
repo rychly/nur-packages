@@ -140,8 +140,7 @@ in {
 
       displayManager.defaultSession =
         (if (cfg.desktopManager != null) then cfg.desktopManager else "none")
-        + "+"
-        + (if (cfg.windowManager != null) then cfg.windowManager else "none");
+        + (if (cfg.windowManager != null) then "+" + cfg.windowManager else "");
 
     };
 
