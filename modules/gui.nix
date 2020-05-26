@@ -52,7 +52,7 @@ in {
     programs.sway = mkIf (cfg.sway) {
       enable = true;
       extraPackages = with pkgs; [
-        h2status	# from rychly/nixpkgs-public
+        luastatus	# from rychly/nixpkgs-public
         xwayland
         rxvt_unicode-with-plugins	# otherwise there is a conflict of default rxvt_unicode extra package with the package set by services.urxvtd.enable
         rofi	# instead of default dmenu
@@ -132,7 +132,7 @@ in {
         enable = cfg.windowManager == "i3";
         extraPackages = with pkgs; [
           rofi	# instead of default dmenu
-          h2status	# from rychly/nixpkgs-public
+          luastatus	# from rychly/nixpkgs-public
           i3lock
         ];
         # no configFile, as the configuration is in home-manager.users.*.services.xsession.windowManager.i3
