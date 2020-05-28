@@ -23,8 +23,8 @@ let
     };
 
     displayManager = mkOption {
-      type = types.nullOr (types.enum [ "auto" "gdm" "lightdm" "sddm" "xpra"]);
-      default = null;
+      type = types.nullOr (types.enum [ "gdm" "lightdm" "sddm" "xpra"]);
+      default = "sddm";	# default is SDDM as it supports both X and Wayland sessions (only other available DM supporting this is GDM which is not lightweight)
       description = "Display manager to enable.";
     };
 
@@ -35,7 +35,7 @@ let
     };
 
     desktopManager = mkOption {
-      type = types.nullOr (types.enum [ "gnome3" "lxqt" "mate" "plasma5" "xfce" ]);
+      type = types.nullOr (types.enum [ "gnome" "gnome-xorg" "lxqt" "mate" "plasma5" "xfce" ]);
       default = null;
       description = "Desktop manager to enable.";
     };
@@ -101,7 +101,9 @@ in {
         tapping = false;
       };
 
-      # display manager (GDM runs in Wayland by default services.xserver.displayManager.gdm.wayland and knows both X and Sway)
+      # display manager (GDM and SDDM knows both X and Wayland sessions, such as Sway; GDM runs in Wayland by default services.xserver.displayManager.gdm.wayland)
+
+      displayManager.${cfg.displayManager}.enable = (cfg.displayManager != null);
 
       displayManager.session = [
         {
@@ -114,12 +116,10 @@ in {
         }
       ];
 
-      displayManager.${cfg.displayManager}.enable = (cfg.displayManager != null);
-
       # desktop and window manager
 
       desktopManager = {
-        gnome3.enable = cfg.desktopManager == "gnome3";
+        gnome3.enable = (cfg.desktopManager == "gnome") || (cfg.desktopManager == "gnome-xorg");
         lxqt.enable = cfg.desktopManager == "lxqt";
         mate.enable = cfg.desktopManager == "mate";
         plasma5.enable = cfg.desktopManager == "plasma5";
@@ -138,6 +138,7 @@ in {
         # no configFile, as the configuration is in home-manager.users.*.services.xsession.windowManager.i3
       };
 
+      # in case of missing session (such as gnome), check desktopManager settings and if the display manager supports its session (Wayland sessions are supported by GDM and SDDM only)
       displayManager.defaultSession =
         (if (cfg.desktopManager != null) then cfg.desktopManager else "none")
         + (if (cfg.windowManager != null) then "+" + cfg.windowManager else "");

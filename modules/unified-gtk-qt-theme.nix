@@ -81,17 +81,14 @@ in {
       librsvg
     ];
 
-    environment.variables = {
-      # Qt4/Qt5: convince it to use our preferred style
-      "QT_QPA_PLATFORMTHEME" = lib.mkForce "gtk2";
-      "QT_STYLE_OVERRIDE" = "GTK+";
-      # GTK2/GTK3: libs/theme definitions in lib/share directories of their packages
-      "GTK_PATH" = lib.mkBefore [ "${pkgs.gnome-themes-standard}/lib/gtk-2.0" ];
-      "GTK2_RC_FILES" = lib.mkBefore [ "${pkgs.gnome-themes-standard}/share/themes/Adwaita/gtk-2.0/gtkrc" ];
-      "XDG_DATA_DIRS" = lib.mkBefore [ "${pkgs.gnome-themes-standard}/share" ];
-    };
-
     environment.extraInit = lib.mkAfter ''
+      # Qt4/Qt5: convince it to use our preferred style
+      export QT_QPA_PLATFORMTHEME="gtk2"
+      export QT_STYLE_OVERRIDE="GTK+"
+      # GTK2/GTK3: libs/theme definitions in lib/share directories of their packages
+      export GTK_PATH="${pkgs.gnome-themes-standard}/lib/gtk-2.0:$GTK_PATH"
+      export GTK2_RC_FILES="${pkgs.gnome-themes-standard}/share/themes/Adwaita/gtk-2.0/gtkrc:$GTK2_RC_FILES"
+      export XDG_DATA_DIRS="${pkgs.gnome-themes-standard}/share:$XDG_DATA_DIRS"
       # QT/GTK: remove local user overrides (for determinism, causes hard to find bugs)
       rm -f ~/.config/Trolltech.conf ~/.gtkrc-2.0 ~/.config/gtk-3.0/settings.ini
       # SVG loader for pixbuf (needed for GTK svg icon themes); cannot be in environment.variables as there is a shell pattern expansion
