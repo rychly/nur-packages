@@ -5,6 +5,7 @@ let
   module-list = [
     ./bluez-alsa.nix
     ./boot.nix
+    ./dhcpcd.nix
     ./gui.nix
     ./hardware.nix
     ./machine.nix
