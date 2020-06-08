@@ -92,7 +92,9 @@
         super.pidgin-sipe
         super.pidgin-window-merge
         super.pidgin-xmpp-receipts
+        super.icyque
         super.purple-hangouts
+        super.telegram-purple
       ];
     };
   };
