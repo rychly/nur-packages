@@ -52,6 +52,7 @@ in {
       enable = true;	# Enabled by default, just to remind me this is the DHCP client (not systemd)
       #allowInterfaces = [ ];	# this is set automatically for all interfaces with enabled networking.interfaces.*.useDHCP
       denyInterfaces = [ "vmnet*" ];	# "vboxnet*" already in defaults, see https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/networking/dhcpcd.nix
+      wait = "if-carrier-up";	# wait only for enabled interfaces (i.e., do not wait for unplugged USB modems)
       extraConfig = ""
         + (lib.optionalString (cfg.slaac != null) "slaac ${cfg.slaac}\n")
         + (lib.optionalString (!cfg.ip4all) "noipv4ll\n")
