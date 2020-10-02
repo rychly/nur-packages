@@ -3,7 +3,6 @@
 let
   fetchNixpkgsGit = ref: builtins.fetchGit {
     url = https://github.com/NixOS/nixpkgs.git;
-    name = "nixpkgs-git-${ref}";
     inherit ref;
   };
 in rec {
