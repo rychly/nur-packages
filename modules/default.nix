@@ -5,13 +5,13 @@ let
   module-list = [
     ./bluez-alsa.nix
     ./boot.nix
-    ./dhcpcd.nix
     ./gui.nix
     ./hardware.nix
     ./machine.nix
     ./mc.nix
     ./mount.nix
     ./multi-glibc-locale-paths.nix
+    ./networking.nix
     ./printing.nix
     ./security-nss.nix
     ./spell-dicts.nix

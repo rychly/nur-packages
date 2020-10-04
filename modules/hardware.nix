@@ -76,19 +76,7 @@ let
       description = "Whether to enable SSD optimizations (tmpfs, profile-sync-daemon, etc.).";
     };
 
-    wifi = mkOption {
-      type = types.either types.bool (types.either types.path types.str);
-      default = false;
-      description = "Whether to enable support for WiFi (<code>false</code> disabled;"
-        + " <code>true</code> for Network Manager; <code>/path/to/wpa_supplicant.conf</code> as of path or string datatype for WPA Supplicant).";
-    };
-
   };
-
-  ## shortcuts
-
-  wifiWpaSupplicant = ! builtins.isBool cfg.wifi;	# not bool -> is the path (or string of the path) to wpa_supplicant.conf
-  wifiNetworkManager = cfg.wifi == true;	# true -> not a path to not wpa_supplicant.conf
 
 in {
 
@@ -166,16 +154,6 @@ in {
 
     services.psd.enable = mkIf (cfg.ssd) true;	# web-browser Profile Sync daemon for SSD optimisation
     boot.tmpOnTmpfs = mkIf (cfg.ssd) true;
-
-    networking.wireless = {
-      enable = wifiWpaSupplicant;	# can be enabled only if NetworkManager is disabled, so if we have wpa_supplicant
-      userControlled.enable = wifiWpaSupplicant;	# enabled only for wpa_supplicant to control it via wpa_cli/wpa_gui
-      networks = { };	# if empty wpa_supplicant will use /etc/wpa_supplicant.conf as the configuration file, which is symlinked to the secure storage
-    };
-    networking.networkmanager.enable = wifiNetworkManager;
-    environment.etc."wpa_supplicant.conf" = mkIf (wifiWpaSupplicant) {
-      source = cfg.wifi;
-    };
 
   };
 
