@@ -156,19 +156,9 @@ in {
 
     # auto-login
     services.mingetty.autologinUser = mkIf (cfg.mainUser.autoLoginMingetty) cfg.mainUser.name;
-    services.xserver.displayManager = {
-      gdm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
-        enable = true;
-        user = cfg.mainUser.name;
-      };
-      lightdm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
-        enable = true;
-        user = mkDefault cfg.mainUser.name;
-      };
-      sddm.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
-        enable = true;
-        user = cfg.mainUser.name;
-      };
+    services.xserver.displayManager.autoLogin = mkIf (cfg.mainUser.autoLoginXserver) {
+      enable = true;
+      user = mkDefault cfg.mainUser.name;
     };
 
     # home-manager home.files and other configuration for individual users
