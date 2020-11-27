@@ -54,7 +54,8 @@ in {
       extraPackages = with pkgs; [
         luastatus	# from rychly/nixpkgs-public
         xwayland
-        rxvt_unicode-with-plugins	# otherwise there is a conflict of default rxvt_unicode extra package with the package set by services.urxvtd.enable
+        #rxvt_unicode-with-plugins	# otherwise there is a conflict of default rxvt_unicode extra package with the package set by services.urxvtd.enable
+        alacritty	# replace urxvt
         rofi	# instead of default dmenu
       ];
       extraSessionCommands = ''
@@ -108,9 +109,9 @@ in {
       displayManager.session = [
         {
           manage = "desktop";
-          name = "urxvt";
+          name = "alacritty";
           start = ''
-            ${pkgs.rxvt_unicode-with-plugins}/bin/urxvt -ls &
+            ${pkgs.alacritty}/bin/alacritty &
             waitPID=$!
           '';
         }
@@ -124,7 +125,7 @@ in {
         mate.enable = cfg.desktopManager == "mate";
         plasma5.enable = cfg.desktopManager == "plasma5";
         xfce.enable = cfg.desktopManager == "xfce";
-        # disable xterm, we have urxvt for window-managed environments above
+        # disable xterm, we have alacritty for window-managed environments above
         xterm.enable = false;
       };
 
